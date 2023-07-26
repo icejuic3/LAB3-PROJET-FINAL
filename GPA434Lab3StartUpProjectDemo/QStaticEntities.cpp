@@ -1,8 +1,8 @@
-//#include "QStaticEntities.h"
-//
-//
-//
-//
-//QStaticEntities::QStaticEntities()
-//{
-//}
+#include "QStaticEntities.h"
+
+
+
+
+QStaticEntities::QStaticEntities()
+{
+}
