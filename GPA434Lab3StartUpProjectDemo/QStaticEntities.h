@@ -3,6 +3,8 @@
 #include <QGraphicsItem>
 #include "QEntities.h"
 
+
+
 class QStaticEntities : public QEntities
 {
 
@@ -27,8 +29,6 @@ private:
 	bool mReadyToEat;
 	bool mIsEdible;
 	bool mGrows;
-
-
 
 };
 

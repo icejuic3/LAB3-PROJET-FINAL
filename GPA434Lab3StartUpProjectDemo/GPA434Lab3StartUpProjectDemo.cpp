@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include "QArrowItem.h"
-
+#include <QGraphicsRectItem>
 
 size_t	const GPA434Lab3StartUpProjectDemo::sMaxNbrOfItems{ 1000 };
 QSize	const GPA434Lab3StartUpProjectDemo::sSceneSize(1000, 600);

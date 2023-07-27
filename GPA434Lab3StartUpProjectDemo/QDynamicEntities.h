@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QGraphicsItem>
 #include "QEntities.h"
 
 
@@ -55,11 +54,6 @@ private:
 	
 	bool mInHeat;
 
-	QString mFamilyId;
-
-
-
-
 };
 
 class QRabbit : public QDynamicEntities
@@ -110,7 +104,7 @@ class QWolf : public QDynamicEntities
 	void approach(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 	void mate(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 
-	QPainterPath shape() const override;
+	QPainterPath shape() override;
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
 	QPainterPath opaqueArea() const override;
 

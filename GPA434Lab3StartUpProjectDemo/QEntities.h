@@ -1,13 +1,16 @@
 #pragma once
 
 #include <QGraphicsItem>
-
+#include <QBrush>
+#include <QPen>
+#include <QPainter>
 class QEntities : public QGraphicsItem
 {
 
 
 public:
-	virtual QPainterPath shape() const = 0;
+	QEntities();
+	virtual QPainterPath shape() = 0;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) = 0;
 	virtual QPainterPath opaqueArea() const = 0;
 
@@ -21,7 +24,12 @@ public:
 	virtual void dynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange)=0;
 	virtual void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
 
-	QString mFamilyIdd;
+	QString mFamilyId;
 
+	QPen mQPen;
+	QBrush mQBrush;
+	QPainterPath mQEntityShape;
+	QPointF mPosition;
+	QColor mColor;
 };
 
