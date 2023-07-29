@@ -5,13 +5,6 @@
 #include <QGraphicsItem>
 #include <QBrush>
 
-
-
-
-
-
-
-
 //
 //x,y
 //
@@ -24,16 +17,6 @@
 //
 //
 //
-
-
-
-
-
-
-
-
-
-
 
 
 
