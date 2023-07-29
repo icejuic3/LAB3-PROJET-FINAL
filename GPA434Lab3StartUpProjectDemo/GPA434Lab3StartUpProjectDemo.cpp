@@ -190,8 +190,6 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	mGraphicsScene.addItem(background);
 
 
-	
-	// ajoute n Loup
 	for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
 		mGraphicsScene.addItem(
 			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
@@ -202,26 +200,45 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 				randomColor()));											// couleur aléatoire
 	}
 	
+	// ajoute n Loup
+
+	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
+	{
+
+	}
+
 
 	//ajoute n lapins
 
+	for (int j{ 0 }; j < mParameters->nbrOfRabbits(); ++j)
+	{
 
+	}
 
 
 	//ajoute n chevereuils
 
+	for (int k{ 0 }; k < mParameters->nbrOfDeers(); ++k)
+	{
 
+	}
 
 
 
 	//ajoute n carrotes
 
+	for (int l{ 0 }; l < mParameters->nbrOfCarrots(); ++l)
+	{
 
+	}
 
 
 	//ajoutes n herbes
 
+	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
+	{
 
+	}
 
 
 
