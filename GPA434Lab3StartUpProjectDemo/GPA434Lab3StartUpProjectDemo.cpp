@@ -11,6 +11,18 @@
 #include "QArrowItem.h"
 #include <QGraphicsRectItem>
 
+
+/****************NOS INCLUDES (A REVOIR)******************/
+
+#include "QEntities.h"
+#include "QStaticEntities.h"
+#include "QDynamicEntities.h"
+
+
+
+/*********************************/
+
+
 size_t	const GPA434Lab3StartUpProjectDemo::sMaxNbrOfItems{ 1000 };
 QSize	const GPA434Lab3StartUpProjectDemo::sSceneSize(1000, 600);
 QColor	const GPA434Lab3StartUpProjectDemo::sSceneBackgroundColor(QColor::fromHsl(215, 80, 222));
@@ -77,55 +89,21 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 
 
 
-
-
-
-
-
 	QWidget* controlWidget{ new QWidget };
 	QVBoxLayout* controlLayout{ new QVBoxLayout };
 
 	controlWidget->setLayout(controlLayout);
-
-
 	controlLayout->addWidget(mParameters);
-
-
-
 	controlLayout->addStretch();
-
-
 	controlLayout->addWidget(mControlBar);
-
-
 	controlLayout->addWidget(mAboutButton);
-
-
-
-
-
-
-
 
 	QWidget* centralWidget{ new QWidget };
 	QHBoxLayout* centralLayout{ new QHBoxLayout };
 	centralWidget->setLayout(centralLayout);
 
-
-
-
-
-
-
-
 	centralLayout->addWidget(mSimulationView);
 	centralLayout->addWidget(controlWidget);
-
-
-
-
-
-
 
 	setCentralWidget(centralWidget);
 
@@ -139,15 +117,6 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 
 	connect(mAboutButton, &QPushButton::clicked, this, &GPA434Lab3StartUpProjectDemo::about);
 }
-
-
-
-
-
-
-
-
-
 
 
 GPA434Lab3StartUpProjectDemo::~GPA434Lab3StartUpProjectDemo()
@@ -190,21 +159,40 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	mGraphicsScene.addItem(background);
 
 
-	for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
-		mGraphicsScene.addItem(
-			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
-				randomPoint(-sCenterRadius, sCenterRadius),					// ils sont tous près de l'origine au départ!
-				random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
-				random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
-				random(sMinSize, sMaxSize),									// taille aléatoire
-				randomColor()));											// couleur aléatoire
-	}
+
+	//for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
+	//	mGraphicsScene.addItem(
+	//		new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
+	//			randomPoint(-sCenterRadius, sCenterRadius),					// ils sont tous près de l'origine au départ!
+	//			random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
+	//			random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
+	//			random(sMinSize, sMaxSize),									// taille aléatoire
+	//			randomColor()));											// couleur aléatoire
+	//}
 	
 	// ajoute n Loup
 
+	QColor red(255, 0, 0);
+	QColor green(0, 255, 0);
+	QBrush mBrush();
+	QColor::fromRgb(255, 0, 0);
+
+
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
+		mGraphicsScene.addItem(
 
+			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
+
+				randomPoint(sSceneSize.width(), sSceneSize.height()),			// ils sont tous près de l'origine au départ!
+
+				random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
+
+				random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
+
+				random(sMinSize, sMaxSize),									// taille aléatoire
+
+				red));											
 	}
 
 
@@ -237,11 +225,15 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
 	{
+		mGraphicsScene.addItem(
 
+			new QHerb(
+				randomPoint(sSceneSize.width(),sSceneSize.height()),
+				random(sMinSize, sMaxSize),
+				green));
+	
 	}
-
-
-
+	
 
 	// Démarre la simulation
 	mTimer.start(30);
@@ -291,8 +283,10 @@ QColor GPA434Lab3StartUpProjectDemo::randomColor()
 	return QColor::fromRgb(QRandomGenerator::global()->generate());
 }
 
-QPointF GPA434Lab3StartUpProjectDemo::randomPoint(qreal min, qreal max)
+
+QPointF GPA434Lab3StartUpProjectDemo::randomPoint(qreal width, qreal height)
 {
-	return QPointF(random(min, max), random(min, max));
+
+	return QPointF(random(0, width), random(0, height));
 }
 
