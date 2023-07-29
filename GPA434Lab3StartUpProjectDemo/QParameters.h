@@ -14,7 +14,10 @@ class QParameters : public QWidget
 public:
 	QParameters(size_t maxItems = 250, QWidget * parent = nullptr);
 
-	size_t nbrOfItems() const;
+	size_t nbrOfItems() const; //a suprimer
+
+
+
 	size_t nbrOfWolves() const;
 	size_t nbrOfRabbits() const;
 	size_t nbrOfDeers() const;
@@ -23,7 +26,6 @@ public:
 
 protected:
 	QSpinBox * mNbrOfItems;	//a suprimer
-
 
 	QSpinBox * mNbrOfWolves;
 	QSpinBox * mNbrOfRabbits;
