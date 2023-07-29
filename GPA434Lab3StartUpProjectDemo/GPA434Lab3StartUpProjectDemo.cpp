@@ -75,20 +75,57 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 
 	mGraphicsScene.setSceneRect(-sSceneSize.width() / 2, -sSceneSize.height() / 2, sSceneSize.width(), sSceneSize.height());
 
+
+
+
+
+
+
+
 	QWidget* controlWidget{ new QWidget };
 	QVBoxLayout* controlLayout{ new QVBoxLayout };
+
 	controlWidget->setLayout(controlLayout);
+
+
 	controlLayout->addWidget(mParameters);
+
+
+
 	controlLayout->addStretch();
+
+
 	controlLayout->addWidget(mControlBar);
+
+
 	controlLayout->addWidget(mAboutButton);
+
+
+
+
+
+
+
 
 	QWidget* centralWidget{ new QWidget };
 	QHBoxLayout* centralLayout{ new QHBoxLayout };
 	centralWidget->setLayout(centralLayout);
 
+
+
+
+
+
+
+
 	centralLayout->addWidget(mSimulationView);
 	centralLayout->addWidget(controlWidget);
+
+
+
+
+
+
 
 	setCentralWidget(centralWidget);
 
@@ -103,6 +140,16 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 	connect(mAboutButton, &QPushButton::clicked, this, &GPA434Lab3StartUpProjectDemo::about);
 }
 
+
+
+
+
+
+
+
+
+
+
 GPA434Lab3StartUpProjectDemo::~GPA434Lab3StartUpProjectDemo()
 {}
 
@@ -111,6 +158,10 @@ void GPA434Lab3StartUpProjectDemo::advance()
 {
 	mGraphicsScene.advance();
 
+
+
+
+
 	for (auto& item : mGraphicsScene.items()) {
 		QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
 		if (arrow && !arrow->isAlive()) {
@@ -118,6 +169,13 @@ void GPA434Lab3StartUpProjectDemo::advance()
 			delete arrow;
 		}
 	}
+
+
+
+
+
+
+
 }
 
 void GPA434Lab3StartUpProjectDemo::startSimulation()
@@ -131,7 +189,9 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	background->setBrush(sSceneBackgroundColor);
 	mGraphicsScene.addItem(background);
 
-	// Ajoute les n flèches
+
+	
+	// ajoute n Loup
 	for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
 		mGraphicsScene.addItem(
 			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
@@ -141,6 +201,30 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 				random(sMinSize, sMaxSize),									// taille aléatoire
 				randomColor()));											// couleur aléatoire
 	}
+	
+
+	//ajoute n lapins
+
+
+
+
+	//ajoute n chevereuils
+
+
+
+
+
+	//ajoute n carrotes
+
+
+
+
+	//ajoutes n herbes
+
+
+
+
+
 
 	// Démarre la simulation
 	mTimer.start(30);

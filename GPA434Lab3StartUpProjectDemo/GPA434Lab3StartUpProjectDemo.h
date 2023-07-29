@@ -8,10 +8,13 @@
 #include <QGraphicsScene>
 #include <QTimer>
 
+
 class QGraphicsView;
 class QControlBar;
 class QParameters;
 class QPushButton;
+
+	
 
 
 
