@@ -11,6 +11,21 @@ class QStaticEntities : public QEntities
 public:
 
 	QStaticEntities(QEntities* parent);
+
+	/***************Fonction visuelle************************/
+
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+	void setColor(QBrush const& brush) override;
+	QRectF boundingRect() const override;
+
+
+
+
+	/*********************************************************/
+
+
+
+
 	//QList<QHerb*> mHerbs;
 	//QList<QCarot*> mCarrots;
 	//QList<QBody*> mBodies;
@@ -39,6 +54,8 @@ class QHerb : public QStaticEntities
 {
 public:
 
+
+
 	QHerb(QPointF const& initialPosition = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntities*parent = nullptr);
 	~QHerb() override = default;
 	QHerb(QHerb const&) = default;
@@ -50,9 +67,9 @@ public:
 	//QPainterPath shape() const override;
 	//QPainterPath opaqueArea() const override;
 
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 	void setColor(QBrush const& brush);
 	QRectF boundingRect() const override;
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
 
 
 	/*****************les fonction logiques*******************/
@@ -62,15 +79,12 @@ public:
 	//void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 
 
-
 protected:
-
 
 	// La couleur de fond
 	QBrush mBrush;
 	// La forme 
 	QPolygonF mShape;
-
 
 };
 
