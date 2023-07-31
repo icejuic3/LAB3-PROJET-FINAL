@@ -14,10 +14,6 @@
 
 /****************NOS INCLUDES (A REVOIR)******************/
 
-#include "QEntities.h"
-#include "QStaticEntities.h"
-#include "QDynamicEntities.h"
-
 
 
 /*********************************/
@@ -174,7 +170,7 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	QColor red(255, 0, 0);
 	QColor green(0, 255, 0);
-	QBrush mBrush();
+	//QBrush mBrush();
 	QColor::fromRgb(255, 0, 0);
 
 
@@ -200,7 +196,7 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int j{ 0 }; j < mParameters->nbrOfRabbits(); ++j)
 	{
-
+		
 	}
 
 
@@ -225,12 +221,9 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
 	{
-		mGraphicsScene.addItem(
-
-			new QHerb(
-				randomPoint(sSceneSize.width(),sSceneSize.height()),
-				random(sMinSize, sMaxSize),
-				green));
+		QHerb* herb = new QHerb(QPointF(m * 10, 0)); // For example, positioning herbs 10 units apart
+		mHerbs.append(herb);
+		mGraphicsScene.addItem(herb);
 	
 	}
 	

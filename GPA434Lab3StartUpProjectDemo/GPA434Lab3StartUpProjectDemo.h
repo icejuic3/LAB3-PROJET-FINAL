@@ -7,6 +7,8 @@
 
 #include <QGraphicsScene>
 #include <QTimer>
+#include "QDynamicEntity.h"
+#include "QStaticEntity.h"
 
 
 class QGraphicsView;
@@ -35,6 +37,10 @@ private:
 	QControlBar* mControlBar;
 	QPushButton* mAboutButton;
 
+	QList<QHerb*> mHerbs;
+	//QList<QCarot*> mCarrots;
+	//QList<QBody*> mBodies;
+	//QList<QExcrement*> mFeces;
 	QTimer mTimer;
 
 	// Fonctions utilitaires de génération de valeurs aléatoires : devraient être ailleurs.

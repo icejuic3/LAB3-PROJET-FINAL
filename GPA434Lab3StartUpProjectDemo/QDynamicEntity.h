@@ -1,25 +1,25 @@
 #pragma once
 
-#include "Qentities.h"
-
-
-class QDynamicEntities : public QEntities
-{
-
-	// dynamic cast 
-	
-
-public:	
-
-	QDynamicEntities(QPointF const& position = QPointF(), QEntities* parent = nullptr);
-
-
-
-
-
-	//les fonctions que les animaux partagent en commun
-
-	bool isAlive() override;
+//#include "QEntity.h"
+//
+//
+//class QDynamicEntity : public QEntity
+//{
+//
+//	// dynamic cast 
+//	
+//
+//public:	
+//
+//	QDynamicEntity(QPointF const& position = QPointF(), QEntity* parent = nullptr);
+//
+//
+//
+//
+//
+//	//les fonctions que les animaux partagent en commun
+//
+//	bool isAlive() override;
 
 	//QList<QDynamicEntities*> mDynamicEntities; //liste de toutes les animaux
 
@@ -50,52 +50,52 @@ public:
 
 	/******setter*********/
 
-	void setAge(qreal age);
-	void setHunger(qreal hunger);
-	void setSpeed(qreal speed);
-	void setHealth(qreal health);
-	void setHeat(bool heat);
-
-	/*****getter**********/
-
-	qreal getAge() const;
-	qreal getHunger() const;
-	qreal getSpeed() const;
-	qreal getHealth() const;
-	bool getHeat() const;
-	/***********************/
-
-
-
-protected:
-	qreal const mMaxAge;
-	qreal mCurrentAge;
-	qreal const mMaxHunger;
-	qreal mCurrentHunger;
-	qreal const mMaxSpeed;
-	qreal mCurrentSpeed;
-	qreal const mMaxHealth;
-	qreal mCurrentHealth;
-	bool mInHeat;
-	qreal const mAttackValue;	// a deplacer dans loup
-};
-
-
-class QWolf : public QDynamicEntities
-{
-	
-public:
-
-	QWolf(QPointF const& position = QPointF(), QDynamicEntities* parent = nullptr);
-	~QWolf() override = default;
-
+//	void setAge(qreal age);
+//	void setHunger(qreal hunger);
+//	void setSpeed(qreal speed);
+//	void setHealth(qreal health);
+//	void setHeat(bool heat);
+//
+//	/*****getter**********/
+//
+//	qreal getAge() const;
+//	qreal getHunger() const;
+//	qreal getSpeed() const;
+//	qreal getHealth() const;
+//	bool getHeat() const;
+//	/***********************/
+//
+//
+//
+//protected:
+//	qreal const mMaxAge;
+//	qreal mCurrentAge;
+//	qreal const mMaxHunger;
+//	qreal mCurrentHunger;
+//	qreal const mMaxSpeed;
+//	qreal mCurrentSpeed;
+//	qreal const mMaxHealth;
+//	qreal mCurrentHealth;
+//	bool mInHeat;
+//	qreal const mAttackValue;	// a deplacer dans loup
+//};
+//
+//
+//class QWolf : public QDynamicEntity
+//{
+//	
+//public:
+//
+//	QWolf(QPointF const& position = QPointF(), QDynamicEntity* parent = nullptr);
+//	~QWolf() override = default;
+//
 
 
 	/******************Fonctions visuel***************************/
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
-	void setColor(QBrush const& brush);
-	QRectF boundingRect() const override;
+	//void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+	//void setColor(QBrush const& brush);
+	//QRectF boundingRect() const override;
 
 
 	/*******************Fonctions logiques*****************************************/
@@ -118,7 +118,7 @@ public:
 
 
 
-};
+//};
 
 //class QRabbit : public QDynamicEntities
 //{
