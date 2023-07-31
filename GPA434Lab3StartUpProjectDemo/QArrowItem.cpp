@@ -53,8 +53,10 @@ void QArrowItem::advance(int phase)
 	if (phase == 0) {
 		static qreal const maxDeltaOrientation{ 12.5 }; // in °
 		// Détermine la nouvelle orientation selon une variation aléatoire dans l'intervalle [-maxDeltaOrientation, maxDeltaOrientation] => ± 12.5°
+
 		mNewOrientation = rotation() + QRandomGenerator::global()->bounded(2.0 * maxDeltaOrientation) - maxDeltaOrientation;
 		// Détermine la nouvelle position selon la nouvelle orientation et la vitesse
+
 		qreal newOrientationRadians{ qDegreesToRadians(mNewOrientation) };
 		mNewPosition = pos() + QPointF(qCos(newOrientationRadians), qSin(newOrientationRadians)) * mSpeed;
 		// Si la nouvelle position est à l'extérieur de la scène, la nouvelle position est téléportée à la région opposée de la scène

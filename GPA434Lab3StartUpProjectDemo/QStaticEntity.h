@@ -10,16 +10,13 @@ class QStaticEntity : public QEntity
 
 public:
 
-	QStaticEntity(QPointF const& position, QGraphicsItem* parent);
+	QStaticEntity(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QEntity* parent = nullptr);
 
 	/***************Fonction visuelle************************/
 
 
-
-
-
 	/*********************************************************/
-
+	bool isAlive() override;
 
 	//virtual void grow() = 0;
 
@@ -30,8 +27,7 @@ public:
 	qreal mCurrentMaturationStage;
 
 
-private:
-
+protected:
 
 	bool mReadyToEat;
 	bool mIsEdible;
@@ -45,40 +41,37 @@ class QHerb : public QStaticEntity
 public:
 
 
-
-	QHerb(QPointF const& initialPosition = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity *parent = nullptr);
+	QHerb(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity *parent = nullptr);
 	~QHerb() override = default;
-	QHerb(QHerb const&) = default;
-	QHerb& operator = (QHerb const&) = delete;
-
+	
+	
 
 	/**************************Les fonctions visuelles***********************************************/
 
-	//QPainterPath shape() const override;
-	//QPainterPath opaqueArea() const override;
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
-	void setColor(QBrush const& brush);
-	QRectF boundingRect() const override;
 
-	void staticEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
+	//void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+	//void setColor(QBrush const& brush);
+	//QRectF boundingRect() const override;
+
+	//void staticEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
 
 
 	/*****************les fonction logiques*******************/
-	void advance(int phase) override;
-	bool isAlive() override;
-	QPainterPath opaqueArea() const override;
+	//void advance(int phase) override;
+	
+	//QPainterPath opaqueArea() const override;
 
-	void checkStatus(QList<QGraphicsItem*>& predatorList) override;
-	void dynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
-	QList<QGraphicsItem*> entitiesInRange() override;
-	void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
+
+
+
+	//void checkStatus(QList<QGraphicsItem*>& predatorList) override;
+	//void dynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
+	//QList<QGraphicsItem*> entitiesInRange() override;
+	//void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 protected:
 
-	// La couleur de fond
-	QBrush mBrush;
-	// La forme 
-	QPolygonF mShape;
+	
 
 };
 

@@ -1,38 +1,48 @@
 #pragma once
 
-//#include "QEntity.h"
-//
-//
-//class QDynamicEntity : public QEntity
-//{
-//
-//	// dynamic cast 
-//	
-//
-//public:	
-//
-//	QDynamicEntity(QPointF const& position = QPointF(), QEntity* parent = nullptr);
-//
-//
-//
-//
-//
-//	//les fonctions que les animaux partagent en commun
-//
-//	bool isAlive() override;
+#include "QEntity.h"
+
+
+class QDynamicEntity : public QEntity
+{
+
+	// dynamic cast 
+	
+
+public:	
+
+	QDynamicEntity(QPointF const& position = QPointF(), qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QEntity* parent = nullptr);
+
+
+
+
+
+	//les fonctions que les animaux partagent en commun
+
+	bool isAlive() override;
+
+
+
+
+	static qreal wander(qreal value, qreal begin, qreal end);
+	void wander(QPointF& point);	//priotite
+	
+
+
+
+
+
+
+
 
 	//QList<QDynamicEntities*> mDynamicEntities; //liste de toutes les animaux
 
 	//void DynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange);		//fonction qui verifie les animaux a proximite
-	//
-	//
-	//
-	//
+	
+	
 	//void seekFood(QList<QGraphicsItem*>& dynamicEntityInRange);						//cherche nourriture
-	//
-	//
-	//
-	//void wander(QList<QGraphicsItem*>& dynamicEntityInRange);
+	
+
 	//void pickNearest(QList<QGraphicsItem*>& dynamicEntityInRange);
 	//void mate(QList<QGraphicsItem*>& dynamicEntityInRange);
 	//void approach(QList<QGraphicsItem*>& dynamicEntityInRange);
@@ -46,59 +56,57 @@
 
 
 
-
-
 	/******setter*********/
 
-//	void setAge(qreal age);
-//	void setHunger(qreal hunger);
-//	void setSpeed(qreal speed);
-//	void setHealth(qreal health);
-//	void setHeat(bool heat);
-//
-//	/*****getter**********/
-//
-//	qreal getAge() const;
-//	qreal getHunger() const;
-//	qreal getSpeed() const;
-//	qreal getHealth() const;
-//	bool getHeat() const;
-//	/***********************/
-//
-//
-//
-//protected:
-//	qreal const mMaxAge;
-//	qreal mCurrentAge;
-//	qreal const mMaxHunger;
-//	qreal mCurrentHunger;
-//	qreal const mMaxSpeed;
-//	qreal mCurrentSpeed;
-//	qreal const mMaxHealth;
-//	qreal mCurrentHealth;
-//	bool mInHeat;
-//	qreal const mAttackValue;	// a deplacer dans loup
-//};
-//
-//
-//class QWolf : public QDynamicEntity
-//{
-//	
-//public:
-//
-//	QWolf(QPointF const& position = QPointF(), QDynamicEntity* parent = nullptr);
-//	~QWolf() override = default;
-//
+	void setAge(qreal age);
+	void setHunger(qreal hunger);
+	void setSpeed(qreal speed);
+	void setHealth(qreal health);
+	void setHeat(bool heat);
+
+	/*****getter**********/
+
+	qreal getAge() const;
+	qreal getHunger() const;
+	qreal getSpeed() const;
+	qreal getHealth() const;
+	bool getHeat() const;
+	/***********************/
+
+
+
+protected:
+	qreal const mMaxAge;
+	qreal mCurrentAge;
+	qreal const mMaxHunger;
+	qreal mCurrentHunger;
+	qreal const mMaxSpeed;
+	qreal mCurrentSpeed;
+	qreal const mMaxHealth;
+	qreal mCurrentHealth;
+	bool mInHeat;
+	qreal const mAttackValue;	// a deplacer dans loup
+};
+
+
+class QWolf : public QDynamicEntity
+{
+	
+public:
+
+	QWolf(QPointF const& position = QPointF(), qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
+	~QWolf() override = default;
+
 
 
 	/******************Fonctions visuel***************************/
 
-	//void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
-	//void setColor(QBrush const& brush);
-	//QRectF boundingRect() const override;
 
 
 	/*******************Fonctions logiques*****************************************/
+	void advance(int phase) override;     //prio
+
+
 
 	//QDynamicEntities PreyInRange(QList<>);		//retourne la proie la plus proche
 	
@@ -108,17 +116,7 @@
 	
 
 
-
-
-
-
-
-
-
-
-
-
-//};
+};
 
 //class QRabbit : public QDynamicEntities
 //{

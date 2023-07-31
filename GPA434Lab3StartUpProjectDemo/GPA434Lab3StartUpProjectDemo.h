@@ -38,6 +38,7 @@ private:
 	QPushButton* mAboutButton;
 
 	QList<QHerb*> mHerbs;
+	QList<QWolf*> mWolves;
 	//QList<QCarot*> mCarrots;
 	//QList<QBody*> mBodies;
 	//QList<QExcrement*> mFeces;

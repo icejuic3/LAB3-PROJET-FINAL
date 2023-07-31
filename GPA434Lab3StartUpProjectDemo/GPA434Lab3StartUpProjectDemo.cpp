@@ -127,19 +127,16 @@ void GPA434Lab3StartUpProjectDemo::advance()
 
 
 
-	for (auto& item : mGraphicsScene.items()) {
-		QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
-		if (arrow && !arrow->isAlive()) {
-			mGraphicsScene.removeItem(arrow);
-			delete arrow;
-		}
-	}
 
 
-
-
-
-
+	//for (auto& item : mGraphicsScene.items()) {
+	//	QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
+	//	if (arrow && !arrow->isAlive()) {
+	//		mGraphicsScene.removeItem(arrow);
+	//		delete arrow;
+	//	}
+	//}
+	//
 
 }
 
@@ -168,27 +165,18 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	
 	// ajoute n Loup
 
-	QColor red(255, 0, 0);
-	QColor green(0, 255, 0);
-	//QBrush mBrush();
-	QColor::fromRgb(255, 0, 0);
-
 
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
-		mGraphicsScene.addItem(
-
-			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
-
-				randomPoint(sSceneSize.width(), sSceneSize.height()),			// ils sont tous près de l'origine au départ!
-
-				random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
-
-				random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
-
-				random(sMinSize, sMaxSize),									// taille aléatoire
-
-				red));											
+		
+		QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width()/2, mGraphicsScene.height()/2),//position de depart
+			sMaxSize,																			//taille du loup
+			1.0,																				//vitess du loup	
+			random(sMinOrientationDegrees, sMaxOrientationDegrees),								 //orientation
+			Qt::red);																			//couleur 
+		
+		mWolves.append(wolf);																	//sauvegarde le loup dans une liste		
+		mGraphicsScene.addItem(wolf);													       //rajoute le loup a la scene
 	}
 
 
@@ -221,10 +209,10 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
 	{
-		QHerb* herb = new QHerb(QPointF(m * 10, 0)); // For example, positioning herbs 10 units apart
-		mHerbs.append(herb);
-		mGraphicsScene.addItem(herb);
-	
+		//QHerb* herb = new QHerb(QPointF(m * 10, 0)); // For example, positioning herbs 10 units apart
+		//mHerbs.append(herb);
+		//mGraphicsScene.addItem(herb);
+		//
 	}
 	
 
