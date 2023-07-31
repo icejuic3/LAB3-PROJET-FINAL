@@ -1,14 +1,13 @@
 #include "QEntities.h"
 
-QEntities::QEntities(QGraphicsItem* parent)
+QEntities::QEntities(QPointF const& position,QGraphicsItem* parent)
 :QGraphicsItem(parent)
 	
 ,mFamilyId{"entity"}
 ,mQPen{Qt::black}
-,mQBrush{Qt::darkRed}
-,mQEntityShape{}
 ,mPosition{0,0}
 ,mColor{Qt::white}
 
 {
+	setPos(position);
 }

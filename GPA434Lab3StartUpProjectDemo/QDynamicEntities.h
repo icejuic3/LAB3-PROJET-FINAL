@@ -6,33 +6,45 @@
 class QDynamicEntities : public QEntities
 {
 
-	QList<QDynamicEntities> DynamicEntities;
-
-	//QList<QRabbit*> mQRabbits;
-	QList<QWolf*> mQWolves;
-	//QList<QDeer*> mQDeers;
-
-	// voir cest quoi la diff de qlits de parent ou q list de enfant
-
 	// dynamic cast 
 	
 
+public:	
 
-public:
+	QDynamicEntities(QPointF const& position = QPointF(), QEntities* parent = nullptr);
 
-	QDynamicEntities(QEntities* parent);
 
-	//Qt virtual function
 
-	virtual void seekFood(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;						//cherche nourriture
-	virtual void pickWeakest(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;					
-	virtual void pickNearest(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
-	virtual void mate(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
-	virtual void sameFamily(QList<QGraphicsItem*>& dynamicEntityInRange, bool sameFamily) = 0;
-	virtual void approach(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
-	virtual void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
-	virtual void wander(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;
-	virtual bool isAlive(QList<QGraphicsItem*>& wolf)=0;
+
+
+	//les fonctions que les animaux partagent en commun
+
+	bool isAlive() override;
+
+	//QList<QDynamicEntities*> mDynamicEntities; //liste de toutes les animaux
+
+	//void DynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange);		//fonction qui verifie les animaux a proximite
+	//
+	//
+	//
+	//
+	//void seekFood(QList<QGraphicsItem*>& dynamicEntityInRange);						//cherche nourriture
+	//
+	//
+	//
+	//void wander(QList<QGraphicsItem*>& dynamicEntityInRange);
+	//void pickNearest(QList<QGraphicsItem*>& dynamicEntityInRange);
+	//void mate(QList<QGraphicsItem*>& dynamicEntityInRange);
+	//void approach(QList<QGraphicsItem*>& dynamicEntityInRange);
+	//void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange);
+	//
+
+	//void sameFamily(QList<QGraphicsItem*>& dynamicEntityInRange, bool sameFamily);	//dans entities?
+	//void pickWeakest(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;				//dans wolf?
+
+
+
+
 
 
 
@@ -56,32 +68,25 @@ public:
 
 
 protected:
-	qreal const mMaxSpeed;
-	qreal mCurrentSpeed;
-
-	qreal const mMaxHealth;
-	qreal mCurrentHealth;
-
-	qreal const mMaxHunger;
-	qreal mCurrentHunger;
-
-	qreal const mAttackValue;	// a deplacer dans loup
-
 	qreal const mMaxAge;
 	qreal mCurrentAge;
-
+	qreal const mMaxHunger;
+	qreal mCurrentHunger;
+	qreal const mMaxSpeed;
+	qreal mCurrentSpeed;
+	qreal const mMaxHealth;
+	qreal mCurrentHealth;
 	bool mInHeat;
-
-
+	qreal const mAttackValue;	// a deplacer dans loup
 };
 
 
 class QWolf : public QDynamicEntities
 {
-
+	
 public:
 
-	QWolf(QDynamicEntities* parent = nullptr);
+	QWolf(QPointF const& position = QPointF(), QDynamicEntities* parent = nullptr);
 	~QWolf() override = default;
 
 
@@ -93,45 +98,21 @@ public:
 	QRectF boundingRect() const override;
 
 
-	/************************************************************/
-
 	/*******************Fonctions logiques*****************************************/
 
-
-	bool isAlive(QList<QGraphicsItem*>& wolf) override;
-
-
-
-
-
-
-
+	//QDynamicEntities PreyInRange(QList<>);		//retourne la proie la plus proche
+	
 
 	/*************************************************************/
 
-
-
-
-
 	
 
-	//QArrowItem(double lifeExpectancy = 1.0, QPointF const& initialPosition = QPointF(), qreal initialOrientationDegrees = 0.0, qreal initialSpeed = 1.0, qreal scale = 1.0, QBrush const& brush = Qt::white, QGraphicsItem* parent = nullptr);
-	
-	//void wander(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void advance(int phase) override;
-	
-	//QList<QGraphicsItem*> entitiesInRange() override;
-	//void staticEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
-	//void dynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) override;
-	//void checkStatus(QList<QGraphicsItem*>& predatorList) override;
-	//void sameFamily(QList<QGraphicsItem*>& dynamicEntityInRange, bool sameFamily) override;
-	//void seekFood(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void pickWeakest(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void approach(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	//void mate(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-	
+
+
+
+
+
+
 
 
 

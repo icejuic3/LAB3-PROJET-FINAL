@@ -2,107 +2,37 @@
 
 
 
-QDynamicEntities::QDynamicEntities(QEntities* parent)
-	:mCurrentAge{1},	//tout les animaux vont etre initialise avec ces valeurs
+QDynamicEntities::QDynamicEntities(QPointF const& position, QEntities* parent)
+	:QEntities(position,parent),
+	mCurrentAge{1},	//tout les animaux vont etre initialise avec ces valeurs
 	mMaxAge{30},
-
-	mCurrentHunger{0},
 	mMaxHunger{30},
-
+	mCurrentHunger{mMaxHunger},
 	mCurrentSpeed{1},
 	mMaxSpeed{5},
-
-	mCurrentHealth{5},
 	mMaxHealth{5},
-
+	mCurrentHealth{mMaxHealth},
 	mAttackValue{1},
-	mInHeat{0},
-	QEntities(parent)
+	mInHeat{0}
 
 {
 	
 	
 }
 
-
-
-
-QWolf::QWolf(QDynamicEntities* parent)
-	:QDynamicEntities(parent)
-{
-}
-
-
-
-
-
-/*****************************************Fonction Loup***********************************************************************/
-bool QWolf::isAlive(QList<QGraphicsItem*>& wolf)
+bool QDynamicEntities::isAlive()
 {
 
+	if (mCurrentAge == mMaxAge || mCurrentHunger == 0) {
 
-	for (size_t i{}; i < wolf.size(); ++i) {
-
-		if (wolf[i] = 0 || wolf[i].mAge)
-
-
-
+		return false;
 	}
 
-
+	return true;
 	
-
-
-
-
-
-
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*******************************************************************************************************************/
-
-
-QPainterPath QDeer::shape() const
-{
-	return QPainterPath();
-}
-
-void QDeer::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
-
-	painter->setPen(mQPen);
-	painter->setBrush(mQBrush);
-	painter->drawPath(mQEntityShape);
-}
-
-QPainterPath QWolf::shape()
-{
-	qreal legWidth{ 1 };
-	qreal legHeight{ 3 };
-	qreal bodyWidth{ 5 };
-	qreal bodyLength{ 10 };
-	qreal headWidth{ 10 };
-	qreal headLength{ 10 };
-
-	mQEntityShape.lineTo(bodyLength, 0);
-	mQEntityShape.lineTo(bodyLength, bodyWidth);
-	mQEntityShape.lineTo(0, bodyWidth);
-	mQEntityShape.closeSubpath();
-
-}
 
 void QDynamicEntities::setAge(qreal age)
 {
@@ -143,3 +73,88 @@ qreal QDynamicEntities::getSpeed() const
 {
 	return mCurrentSpeed;
 }
+
+qreal QDynamicEntities::getHealth() const
+{
+	return mCurrentHealth;
+}
+
+bool QDynamicEntities::getHeat() const
+{
+	return mInHeat;
+}
+
+
+
+
+/*****************************************Fonction Loup***********************************************************************/
+
+
+QWolf::QWolf(QPointF const& position, QDynamicEntities* parent)
+	:QDynamicEntities(position,parent)
+{
+
+	setColor(Qt::red);
+	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
+
+	setScale(15);
+	
+}
+
+void QWolf::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+	painter->setPen(Qt::NoPen);
+	painter->setBrush(mBrush);
+	painter->drawPolygon(mShape);
+
+}
+
+void QWolf::setColor(QBrush const& brush)
+{
+	mBrush = brush;
+}
+
+QRectF QWolf::boundingRect() const
+{
+	return mShape.boundingRect();
+}
+
+
+
+
+
+
+
+
+/*******************************************************************************************************************/
+//
+//
+//QPainterPath QDeer::shape() const
+//{
+//	return QPainterPath();
+//}
+//
+//void QDeer::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+//{
+//
+//	painter->setPen(mQPen);
+//	painter->setBrush(mQBrush);
+//	painter->drawPath(mQEntityShape);
+//}
+//
+//QPainterPath QWolf::shape()
+//{
+//	qreal legWidth{ 1 };
+//	qreal legHeight{ 3 };
+//	qreal bodyWidth{ 5 };
+//	qreal bodyLength{ 10 };
+//	qreal headWidth{ 10 };
+//	qreal headLength{ 10 };
+//
+//	mQEntityShape.lineTo(bodyLength, 0);
+//	mQEntityShape.lineTo(bodyLength, bodyWidth);
+//	mQEntityShape.lineTo(0, bodyWidth);
+//	mQEntityShape.closeSubpath();
+//
+//}
+//
