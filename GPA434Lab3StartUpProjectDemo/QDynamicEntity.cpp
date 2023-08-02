@@ -4,10 +4,10 @@
 #include <QtMath>
 
 
-QDynamicEntity::QDynamicEntity(QPointF const& position, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
+QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
-	mCurrentAge{1},	//tout les animaux vont etre initialise avec ces valeurs
-	mMaxAge{30},
+	mCurrentAge{age},	//tout les animaux vont etre initialise avec ces valeurs
+	mMaxAge{100},
 	mMaxHunger{30},
 	mCurrentHunger{mMaxHunger},
 	mCurrentSpeed{ speed },
@@ -17,7 +17,6 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal scale, qreal speed
 	mInHeat{0},
 	mNewOrientation{0}
 
-
 {
 	setRotation(initialOrientationDegrees);
 	
@@ -26,7 +25,7 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal scale, qreal speed
 bool QDynamicEntity::isAlive()
 {
 
-	if (mCurrentAge == mMaxAge || mCurrentHunger == 0) {
+	if (mCurrentAge >= mMaxAge || mCurrentHunger <= 0) {
 
 		return false;
 	}
@@ -107,8 +106,8 @@ bool QDynamicEntity::getHeat() const
 /*****************************************Fonction Loup***********************************************************************/
 
 
-QWolf::QWolf(QPointF const& initialPosition = QPointF(), qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
-	:QDynamicEntity(initialPosition,scale,speed,initialOrientationDegrees,brush,parent)
+QWolf::QWolf(QPointF const& initialPosition = QPointF(),qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(initialPosition,age,scale,speed,initialOrientationDegrees,brush,parent)
 {
 
 	//mCurrentSpeed = 1.0;
@@ -144,6 +143,9 @@ void QWolf::advance(int phase)
 		// Plus vieux... le temps fil si rapidement...
 		mCurrentAge += 0.030;
 	}
+
+
+
 
 }
 

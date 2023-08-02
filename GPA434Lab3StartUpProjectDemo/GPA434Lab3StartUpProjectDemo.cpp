@@ -41,6 +41,11 @@ qreal	const GPA434Lab3StartUpProjectDemo::sMaxSpeed{ 5.0 };
 qreal	const GPA434Lab3StartUpProjectDemo::sMinSize{ 7.5 };
 qreal	const GPA434Lab3StartUpProjectDemo::sMaxSize{ 15.0 };
 
+
+qreal	const GPA434Lab3StartUpProjectDemo::sMinAge{ 10 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMaxAge{ 50 };
+
+
 const QString GPA434Lab3StartUpProjectDemo::sAboutButtonText("À propos...");
 const QString GPA434Lab3StartUpProjectDemo::sAboutText(
     R"..(GPA434 
@@ -101,6 +106,8 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 	centralLayout->addWidget(mSimulationView);
 	centralLayout->addWidget(controlWidget);
 
+	
+
 	setCentralWidget(centralWidget);
 
 	connect(mControlBar, &QControlBar::started, this, &GPA434Lab3StartUpProjectDemo::startSimulation);
@@ -108,6 +115,8 @@ GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
 	connect(mControlBar, &QControlBar::paused, this, &GPA434Lab3StartUpProjectDemo::pauseSimulation);
 	connect(mControlBar, &QControlBar::resumed, this, &GPA434Lab3StartUpProjectDemo::resumeSimulation);
 	connect(mControlBar, &QControlBar::stepped, this, &GPA434Lab3StartUpProjectDemo::stepSimulation);
+
+
 
 	connect(&mTimer, &QTimer::timeout, this, &GPA434Lab3StartUpProjectDemo::advance);
 
@@ -123,20 +132,38 @@ void GPA434Lab3StartUpProjectDemo::advance()
 {
 	mGraphicsScene.advance();
 
-
-
-
-
-
-
-	//for (auto& item : mGraphicsScene.items()) {
-	//	QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
-	//	if (arrow && !arrow->isAlive()) {
-	//		mGraphicsScene.removeItem(arrow);
-	//		delete arrow;
+	//for (size_t i{0}; i < mWolves.size(); ++i) {
+	//
+	//	if (!mWolves[i]->isAlive()) {
+	//
+	//		mGraphicsScene.removeItem(mWolves[i]);
+	//		//delete mWolves[i];
+	//		mWolves.removeAt(i);
+	//
 	//	}
 	//}
 	//
+
+
+
+	for (auto& item : mGraphicsScene.items()) {
+
+		QDynamicEntity* animal{ dynamic_cast<QDynamicEntity*>(item) };
+		if (animal && !animal->isAlive()) {
+			mGraphicsScene.removeItem(animal);
+			delete animal;
+		}
+	}
+
+//
+//	for (auto& item : mGraphicsScene.items()) {
+//		QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
+//		if (arrow && !arrow->isAlive()) {
+//			mGraphicsScene.removeItem(arrow);
+//			delete arrow;
+//		}
+//	}
+//	
 
 }
 
@@ -168,15 +195,18 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
-		
-		QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width()/2, mGraphicsScene.height()/ 2)	//position de departs
-			,sMaxSize																				//taille du loup
-			,1.0																			    //vitess du loup	
-			, random(sMinOrientationDegrees, sMaxOrientationDegrees)								//orientation
-			, QColor(100,100,100));																	//couleur 
-		
-		mWolves.append(wolf);																		//sauvegarde le loup dans une liste		
-		mGraphicsScene.addItem(wolf);															    //rajoute le loup a la scene
+		mGraphicsScene.addItem(
+			new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)	//position de departs
+				, random(sMinAge, sMaxAge)																//age random
+				, sMaxSize																				//taille du loup
+				, 1.0																			    //vitess du loup	
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)								//orientation
+				, QColor(100, 100, 100))																	//couleur
+
+
+
+
+		);
 	}
 
 

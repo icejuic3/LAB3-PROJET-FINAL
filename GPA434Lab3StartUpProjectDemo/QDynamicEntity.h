@@ -11,7 +11,7 @@ class QDynamicEntity : public QEntity
 
 public:	
 
-	QDynamicEntity(QPointF const& position = QPointF(), qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QEntity* parent = nullptr);
+	QDynamicEntity(QPointF const& position = QPointF(), qreal age=1.0, qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QEntity* parent = nullptr);
 
 
 
@@ -96,7 +96,7 @@ class QWolf : public QDynamicEntity
 	
 public:
 
-	QWolf(QPointF const& initialPosition, qreal scale = 1.0, qreal speed = 0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
+	QWolf(QPointF const& initialPosition, qreal age=1.0 , qreal scale = 1.0, qreal speed = 0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
 	~QWolf() override = default;
 
 

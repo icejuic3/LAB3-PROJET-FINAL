@@ -37,8 +37,8 @@ private:
 	QControlBar* mControlBar;
 	QPushButton* mAboutButton;
 
-	QList<QHerb*> mHerbs;
-	QList<QWolf*> mWolves;
+	//QList<QHerb*> mHerbs;
+	//QList<QWolf*> mWolves;
 	//QList<QRabbit*>;
 	//QList<QCarot*> mCarrots;
 	//QList<QBody*> mBodies;
@@ -87,4 +87,12 @@ private:
 	static qreal	const sMaxSpeed;				//    "
 	static qreal	const sMinSize;					//    "
 	static qreal	const sMaxSize;					//    "
+
+	static qreal	const sMinAge;
+	static qreal	const sMaxAge;
+
+	
+
+
+
 };
