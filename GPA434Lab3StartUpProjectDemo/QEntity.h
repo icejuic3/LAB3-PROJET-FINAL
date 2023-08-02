@@ -40,7 +40,7 @@ public:
 	QPointF& getPosition() ;
 
 
-	+
+	
 
 
 

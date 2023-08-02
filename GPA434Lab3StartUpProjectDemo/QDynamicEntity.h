@@ -26,7 +26,7 @@ public:
 
 	static qreal wander(qreal value, qreal begin, qreal end);
 	void wander(QPointF& point);	//priotite
-	
+	//
 
 
 
@@ -86,6 +86,9 @@ protected:
 	qreal mCurrentHealth;
 	bool mInHeat;
 	qreal const mAttackValue;	// a deplacer dans loup
+	QPointF mNewPosition;
+	qreal mNewOrientation;
+
 };
 
 
@@ -94,7 +97,7 @@ class QWolf : public QDynamicEntity
 	
 public:
 
-	QWolf(QPointF const& position = QPointF(), qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
+	QWolf(QPointF const& initialPosition, qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
 	~QWolf() override = default;
 
 
@@ -118,11 +121,11 @@ public:
 
 };
 
-//class QRabbit : public QDynamicEntities
+//class QRabbit : public QDynamicEntity
 //{
 //	bool isAlive(QList<QGraphicsItem*>& predatorList) override;
 //
-//	void wander(QList<QGraphicsItem*>& dynamicEntityInRange) override;
+//	void wander() override;
 //	void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 //	void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
 //	void advance(int phase) override;

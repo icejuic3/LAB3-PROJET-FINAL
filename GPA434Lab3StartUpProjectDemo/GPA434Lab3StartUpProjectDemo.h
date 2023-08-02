@@ -39,6 +39,7 @@ private:
 
 	QList<QHerb*> mHerbs;
 	QList<QWolf*> mWolves;
+	//QList<QRabbit*>;
 	//QList<QCarot*> mCarrots;
 	//QList<QBody*> mBodies;
 	//QList<QExcrement*> mFeces;

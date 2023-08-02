@@ -24,7 +24,9 @@ class QArrowItem : public QGraphicsItem
 {
 public:
 	// On choisi un constructeur par défaut offrant optionnellement un accès à tous les paramètres de la forme.
-	QArrowItem(double lifeExpectancy = 1.0, QPointF const & initialPosition = QPointF(), qreal initialOrientationDegrees = 0.0, qreal initialSpeed = 1.0, qreal scale = 1.0, QBrush const & brush = Qt::white, QGraphicsItem * parent = nullptr);
+	QArrowItem(double lifeExpectancy = 1.0, QPointF const & initialPosition = QPointF()
+		, qreal initialOrientationDegrees = 0.0, qreal initialSpeed = 1.0,
+		qreal scale = 1.0, QBrush const & brush = Qt::white, QGraphicsItem * parent = nullptr);
 	~QArrowItem() override = default;
 	QArrowItem(QArrowItem const &) = default;
 	QArrowItem& operator=(QArrowItem const &) = delete;

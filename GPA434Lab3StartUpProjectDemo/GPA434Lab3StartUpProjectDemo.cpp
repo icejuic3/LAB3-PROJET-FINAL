@@ -21,7 +21,7 @@
 
 size_t	const GPA434Lab3StartUpProjectDemo::sMaxNbrOfItems{ 1000 };
 QSize	const GPA434Lab3StartUpProjectDemo::sSceneSize(1000, 600);
-QColor	const GPA434Lab3StartUpProjectDemo::sSceneBackgroundColor(QColor::fromHsl(215, 80, 222));
+QColor	const GPA434Lab3StartUpProjectDemo::sSceneBackgroundColor(QColor(240,240,240));
 QString	const GPA434Lab3StartUpProjectDemo::sControlStartText("Démarrer la simulation");
 QString	const GPA434Lab3StartUpProjectDemo::sControlStopText("Terminer la simulation");
 QString	const GPA434Lab3StartUpProjectDemo::sControlPauseText("Mettre la simulation sur pause");
@@ -153,15 +153,15 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 
 
-	//for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
-	//	mGraphicsScene.addItem(
-	//		new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
-	//			randomPoint(-sCenterRadius, sCenterRadius),					// ils sont tous près de l'origine au départ!
-	//			random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
-	//			random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
-	//			random(sMinSize, sMaxSize),									// taille aléatoire
-	//			randomColor()));											// couleur aléatoire
-	//}
+	for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
+		mGraphicsScene.addItem(
+			new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
+				randomPoint(-sCenterRadius, sCenterRadius),					// ils sont tous près de l'origine au départ!
+				random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
+				random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
+				random(sMinSize, sMaxSize),									// taille aléatoire
+				randomColor()));											// couleur aléatoire
+	}
 	
 	// ajoute n Loup
 
@@ -169,11 +169,12 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
 		
-		QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width()/2, mGraphicsScene.height()/2),//position de depart
-			sMaxSize,																			//taille du loup
-			1.0,																				//vitess du loup	
-			random(sMinOrientationDegrees, sMaxOrientationDegrees),								 //orientation
-			Qt::red);																			//couleur 
+		QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width()/2
+			, mGraphicsScene.height()/2)														//position de departs
+			,sMaxSize																			//taille du loup
+			,0.1																				//vitess du loup	
+			, random(sMinOrientationDegrees, sMaxOrientationDegrees)								 //orientation
+			, QColor(100,100,100));																			//couleur 
 		
 		mWolves.append(wolf);																	//sauvegarde le loup dans une liste		
 		mGraphicsScene.addItem(wolf);													       //rajoute le loup a la scene
@@ -184,7 +185,15 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int j{ 0 }; j < mParameters->nbrOfRabbits(); ++j)
 	{
-		
+		//QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2),//position de depart
+		//	sMaxSize,																			//taille du loup
+		//	0.1,																				//vitess du loup	
+		//	random(sMinOrientationDegrees, sMaxOrientationDegrees),								 //orientation
+		//	QColor(100, 100, 100));																			//couleur 
+
+		//mWolves.append(wolf);																	//sauvegarde le loup dans une liste		
+		//mGraphicsScene.addItem(wolf);													       //rajoute le loup a la scene
+
 	}
 
 
