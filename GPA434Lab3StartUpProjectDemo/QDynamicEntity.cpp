@@ -7,7 +7,7 @@
 QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
 	mCurrentAge{age},	//tout les animaux vont etre initialise avec ces valeurs
-	mMaxAge{100},
+	mMaxAge{25},
 	mMaxHunger{30},
 	mCurrentHunger{mMaxHunger},
 	mCurrentSpeed{ speed },

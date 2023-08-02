@@ -42,8 +42,8 @@ qreal	const GPA434Lab3StartUpProjectDemo::sMinSize{ 7.5 };
 qreal	const GPA434Lab3StartUpProjectDemo::sMaxSize{ 15.0 };
 
 
-qreal	const GPA434Lab3StartUpProjectDemo::sMinAge{ 10 };
-qreal	const GPA434Lab3StartUpProjectDemo::sMaxAge{ 50 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMinAge{ 1 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMaxAge{ 15 };
 
 
 const QString GPA434Lab3StartUpProjectDemo::sAboutButtonText("À propos...");
@@ -132,28 +132,22 @@ void GPA434Lab3StartUpProjectDemo::advance()
 {
 	mGraphicsScene.advance();
 
-	//for (size_t i{0}; i < mWolves.size(); ++i) {
-	//
-	//	if (!mWolves[i]->isAlive()) {
-	//
-	//		mGraphicsScene.removeItem(mWolves[i]);
-	//		//delete mWolves[i];
-	//		mWolves.removeAt(i);
-	//
-	//	}
-	//}
-	//
-
-
 
 	for (auto& item : mGraphicsScene.items()) {
 
-		QDynamicEntity* animal{ dynamic_cast<QDynamicEntity*>(item) };
+		QEntity* animal{ dynamic_cast<QEntity*>(item) };
 		if (animal && !animal->isAlive()) {
 			mGraphicsScene.removeItem(animal);
 			delete animal;
 		}
 	}
+
+
+
+
+
+
+
 
 //
 //	for (auto& item : mGraphicsScene.items()) {
@@ -202,9 +196,6 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 				, 1.0																			    //vitess du loup	
 				, random(sMinOrientationDegrees, sMaxOrientationDegrees)								//orientation
 				, QColor(100, 100, 100))																	//couleur
-
-
-
 
 		);
 	}
