@@ -11,11 +11,12 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal scale, qreal speed
 	mMaxHunger{30},
 	mCurrentHunger{mMaxHunger},
 	mCurrentSpeed{ speed },
-	mMaxSpeed{ speed },
 	mMaxHealth{5},
 	mCurrentHealth{mMaxHealth},
 	mAttackValue{1},
-	mInHeat{0}
+	mInHeat{0},
+	mNewOrientation{0}
+
 
 {
 	setRotation(initialOrientationDegrees);
@@ -43,8 +44,8 @@ qreal QDynamicEntity::wander(qreal value, qreal begin, qreal end)
 
 void QDynamicEntity::wander(QPointF& point)
 {
-	//point.setX(wander(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
-	//point.setY(wander(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
+	point.setX(wander(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
+	point.setY(wander(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
 
 }
 
@@ -107,8 +108,10 @@ bool QDynamicEntity::getHeat() const
 
 
 QWolf::QWolf(QPointF const& initialPosition = QPointF(), qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
-	:QDynamicEntity(initialPosition,scale,initialOrientationDegrees,speed,brush,parent)
+	:QDynamicEntity(initialPosition,scale,speed,initialOrientationDegrees,brush,parent)
 {
+
+	//mCurrentSpeed = 1.0;
 
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
 	setPos(initialPosition);

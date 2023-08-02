@@ -6,6 +6,8 @@
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
+#include <QGraphicsScene>
+
 class QEntity : public QGraphicsItem
 {
 protected:

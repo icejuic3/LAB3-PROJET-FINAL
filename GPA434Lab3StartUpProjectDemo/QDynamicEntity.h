@@ -80,7 +80,6 @@ protected:
 	qreal mCurrentAge;
 	qreal const mMaxHunger;
 	qreal mCurrentHunger;
-	qreal const mMaxSpeed;
 	qreal mCurrentSpeed;
 	qreal const mMaxHealth;
 	qreal mCurrentHealth;
@@ -97,7 +96,7 @@ class QWolf : public QDynamicEntity
 	
 public:
 
-	QWolf(QPointF const& initialPosition, qreal scale = 1.0, qreal speed = 1.0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
+	QWolf(QPointF const& initialPosition, qreal scale = 1.0, qreal speed = 0, qreal initialOrientationDegrees = 0.0, QBrush const& brush = Qt::white, QDynamicEntity* parent = nullptr);
 	~QWolf() override = default;
 
 
