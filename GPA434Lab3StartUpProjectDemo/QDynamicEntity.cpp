@@ -19,7 +19,6 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, 
 
 {
 	setRotation(initialOrientationDegrees);
-	
 }
 
 bool QDynamicEntity::isAlive()
@@ -34,18 +33,45 @@ bool QDynamicEntity::isAlive()
 	
 }
 
-qreal QDynamicEntity::wander(qreal value, qreal begin, qreal end)
+qreal QDynamicEntity::warp(qreal value, qreal begin, qreal end)
 {
 	qreal const width = end - begin;
 	return value - qFloor((value - begin) / width) * width;
 
 }
 
-void QDynamicEntity::wander(QPointF& point)
+void QDynamicEntity::warp(QPointF& point)
 {
-	point.setX(wander(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
-	point.setY(wander(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
+	point.setX(warp(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
+	point.setY(warp(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
 
+}
+
+void QDynamicEntity::wander(int phase)
+{
+	if (phase == 0) {
+		static qreal const maxDeltaOrientation{ 12.5 }; // in °
+		// Détermine la nouvelle orientation selon une variation aléatoire dans l'intervalle [-maxDeltaOrientation, maxDeltaOrientation] => ± 12.5°
+
+		mNewOrientation = rotation() + QRandomGenerator::global()->bounded(2.0 * maxDeltaOrientation) - maxDeltaOrientation;
+		// Détermine la nouvelle position selon la nouvelle orientation et la vitesse
+
+		qreal newOrientationRadians{ qDegreesToRadians(mNewOrientation) };
+		mNewPosition = pos() + QPointF(qCos(newOrientationRadians), qSin(newOrientationRadians)) * mCurrentSpeed;
+		// Si la nouvelle position est à l'extérieur de la scène, la nouvelle position est téléportée à la région opposée de la scène
+		warp(mNewPosition);
+		//
+		// Applique le comportement
+	}
+	else if (phase == 1) {
+		// Applique la nouvelle orientation et la nouvelle position
+		setRotation(mNewOrientation);
+		setPos(mNewPosition);
+
+		// Plus vieux... le temps fil si rapidement...
+
+		ageIncrement();
+	}
 }
 
 
@@ -106,52 +132,46 @@ bool QDynamicEntity::getHeat() const
 /*****************************************Fonction Loup***********************************************************************/
 
 
-QWolf::QWolf(QPointF const& initialPosition = QPointF(),qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
-	:QDynamicEntity(initialPosition,age,scale,speed,initialOrientationDegrees,brush,parent)
+QWolf::QWolf(QPointF const& position = QPointF(),qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(position,age,scale,speed,initialOrientationDegrees,brush,parent)
 {
 
-	//mCurrentSpeed = 1.0;
 
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
-	setPos(initialPosition);
-	setRotation(initialOrientationDegrees);
-	setScale(scale);
-
 }
 
 void QWolf::advance(int phase)
 {
-	if (phase == 0) {
-		static qreal const maxDeltaOrientation{ 12.5 }; // in °
-		// Détermine la nouvelle orientation selon une variation aléatoire dans l'intervalle [-maxDeltaOrientation, maxDeltaOrientation] => ± 12.5°
+	wander(phase);
 
-		mNewOrientation = rotation() + QRandomGenerator::global()->bounded(2.0 * maxDeltaOrientation) - maxDeltaOrientation;
-		// Détermine la nouvelle position selon la nouvelle orientation et la vitesse
+}
 
-		qreal newOrientationRadians{ qDegreesToRadians(mNewOrientation) };
-		mNewPosition = pos() + QPointF(qCos(newOrientationRadians), qSin(newOrientationRadians)) * mCurrentSpeed;
-		// Si la nouvelle position est à l'extérieur de la scène, la nouvelle position est téléportée à la région opposée de la scène
-		wander(mNewPosition);
-		//
-		// Applique le comportement
-	}
-	else if (phase == 1) {
-		// Applique la nouvelle orientation et la nouvelle position
-		setRotation(mNewOrientation);
-		setPos(mNewPosition);
-
-		// Plus vieux... le temps fil si rapidement...
-		mCurrentAge += 0.030;
-	}
+void QWolf::ageIncrement()
+{
+	mCurrentAge += 0.050;
+}
 
 
+/**********************************************Fonctions Lapin*********************************************************************/
+
+QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(position, age, scale, speed, initialOrientationDegrees, brush, parent)
+{
+
+	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
+
+}
+
+void QRabbit::advance(int phase)
+{
+	wander(phase);
 
 
 }
 
 
+void QRabbit::ageIncrement()
+{
+	mCurrentAge += 0.030;
 
-
-
-/*******************************************************************************************************************/
-
+}

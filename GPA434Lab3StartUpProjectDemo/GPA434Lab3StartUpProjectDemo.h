@@ -37,12 +37,6 @@ private:
 	QControlBar* mControlBar;
 	QPushButton* mAboutButton;
 
-	//QList<QHerb*> mHerbs;
-	//QList<QWolf*> mWolves;
-	//QList<QRabbit*>;
-	//QList<QCarot*> mCarrots;
-	//QList<QBody*> mBodies;
-	//QList<QExcrement*> mFeces;
 	QTimer mTimer;
 
 	// Fonctions utilitaires de génération de valeurs aléatoires : devraient être ailleurs.

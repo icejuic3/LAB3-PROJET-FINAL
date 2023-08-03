@@ -30,8 +30,3 @@ QRectF QEntity::boundingRect() const
 }
 
 
-QPointF& QEntity::getPosition()
-{
-    QPointF bob{ 2,2 };
-    return bob;
-}

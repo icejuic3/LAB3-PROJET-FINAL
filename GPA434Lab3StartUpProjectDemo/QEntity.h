@@ -18,14 +18,13 @@ protected:
 	QBrush mBrush;		//variable pour le brush
 	QPolygonF mShape;	//variable pour la forme de l'entite
 	QPointF mPosition;	//variable pour la position de l'entite
-
 	QPen mQPen;
 	//QPainterPath mQEntityShape;
 
 
 public:
 	QEntity(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QGraphicsItem*parent = nullptr);
-	
+	~QEntity() = default;
 	
 
 	/***************Fonction visuelle************************/
@@ -39,14 +38,7 @@ public:
 	virtual bool isAlive() = 0;												//
 	
 
-	QPointF& getPosition() ;
-
-
 	
-
-
-
-
 	
 	//virtual QList<QGraphicsItem*> entitiesInRange() = 0;
 	//virtual void staticEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange) = 0;

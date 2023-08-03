@@ -148,8 +148,6 @@ void GPA434Lab3StartUpProjectDemo::advance()
 
 
 
-
-//
 //	for (auto& item : mGraphicsScene.items()) {
 //		QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
 //		if (arrow && !arrow->isAlive()) {
@@ -158,7 +156,6 @@ void GPA434Lab3StartUpProjectDemo::advance()
 //		}
 //	}
 //	
-
 }
 
 void GPA434Lab3StartUpProjectDemo::startSimulation()
@@ -190,30 +187,28 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
 		mGraphicsScene.addItem(
-			new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)	//position de departs
-				, random(sMinAge, sMaxAge)																//age random
-				, sMaxSize																				//taille du loup
-				, 1.0																			    //vitess du loup	
-				, random(sMinOrientationDegrees, sMaxOrientationDegrees)								//orientation
-				, QColor(100, 100, 100))																	//couleur
-
+			new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)	//position de depart
+				, random(sMinAge, sMaxAge)													//age random
+				, 15																		//taille du loup
+				, 1.0																		//vitess du loup	
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					//orientation
+				, QColor(Qt::black))														//couleur
 		);
 	}
 
-
+	
 	//ajoute n lapins
 
 	for (int j{ 0 }; j < mParameters->nbrOfRabbits(); ++j)
 	{
-		//QWolf* wolf = new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2),//position de depart
-		//	sMaxSize,																			//taille du loup
-		//	0.1,																				//vitess du loup	
-		//	random(sMinOrientationDegrees, sMaxOrientationDegrees),								 //orientation
-		//	QColor(100, 100, 100));																			//couleur 
-
-		//mWolves.append(wolf);																	//sauvegarde le loup dans une liste		
-		//mGraphicsScene.addItem(wolf);													       //rajoute le loup a la scene
-
+		mGraphicsScene.addItem(
+			new QRabbit(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2) //position de depart
+				, random(sMinAge, sMaxAge)													 //age random
+				, 8																			 //taille du lapin
+				, 1.5																		 //vitess du lapin	
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					 //orientation
+				, QColor(Qt::lightGray))													 //couleur
+		);
 	}
 
 
@@ -221,30 +216,25 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 
 	for (int k{ 0 }; k < mParameters->nbrOfDeers(); ++k)
 	{
-
 	}
-
-
 
 	//ajoute n carrotes
 
 	for (int l{ 0 }; l < mParameters->nbrOfCarrots(); ++l)
 	{
-
 	}
-
 
 	//ajoutes n herbes
 
 	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
 	{
-		//QHerb* herb = new QHerb(QPointF(m * 10, 0)); // For example, positioning herbs 10 units apart
-		//mHerbs.append(herb);
-		//mGraphicsScene.addItem(herb);
-		//
+		mGraphicsScene.addItem(
+			new QHerb(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)		//position de depart
+				, 10																				//taille herbe
+				, QColor(Qt::green))
+		);
 	}
 	
-
 	// Démarre la simulation
 	mTimer.start(30);
 

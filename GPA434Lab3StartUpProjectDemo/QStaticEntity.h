@@ -11,6 +11,7 @@ class QStaticEntity : public QEntity
 public:
 
 	QStaticEntity(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QEntity* parent = nullptr);
+	~QStaticEntity() override = default;
 
 	/***************Fonction visuelle************************/
 
@@ -41,10 +42,17 @@ class QHerb : public QStaticEntity
 public:
 
 
-	QHerb(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity *parent = nullptr);
+	QHerb(QPointF const& position, qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity* parent = nullptr);
 	~QHerb() override = default;
 	
 	
+
+	void advance(int phase) override;
+
+
+
+
+
 
 	/**************************Les fonctions visuelles***********************************************/
 
