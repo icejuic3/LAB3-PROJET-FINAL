@@ -20,7 +20,9 @@ protected:
 	QBrush mBrush;		//variable pour le brush
 	QPolygonF mShape;	//variable pour la forme de l'entite
 	QPointF mPosition;	//variable pour la position de l'entite
-	QPainterPath mLineOfSight;
+
+	QPainterPath mLineOfSight; //distance de vision pour une entite
+
 	QPen mQPen;
 	//QPainterPath mQEntityShape;
 

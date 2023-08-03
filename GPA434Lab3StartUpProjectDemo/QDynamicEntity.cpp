@@ -2,7 +2,7 @@
 
 #include <QRandomGenerator>
 #include <QtMath>
-
+#include <cmath>
 
 QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
@@ -87,26 +87,49 @@ void QDynamicEntity::wander(int phase)
 
 void QDynamicEntity::sameFamily(bool sameFamily)
 {
-	for (auto it = mEntitiesInRange.begin(); it != mEntitiesInRange.end(); ++it) {
-		QGraphicsItem* item = *it;
+
+
+	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();){
+
+		QGraphicsItem* item = *it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
+		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
 
 		QEntity* entity = dynamic_cast<QEntity*>(item);
-		if (entity&& sameFamily) {
+
+		if (entity && sameFamily) {
 			if (entity->getFamilyId() == getFamilyId()) {
 				//mEntitiesInRange.append(entity);
+
 			}
 			else if (entity && !sameFamily) {
-				it = mEntitiesInRange.erase(it);
+				it = mEntitiesInRange.erase(it); // vient deleter lentite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
+				// on reactualise le pointeur a it 
 			}
-			
+
+
 		}
+		++it;
 	}
-
 }
-
 void QDynamicEntity::pickNearest()
 {
 
+	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+	{
+		QGraphicsItem* item = *it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
+		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
+
+		QEntity* entity = dynamic_cast<QEntity*>(item);
+
+
+		if(entity && entity!=this){
+		sqrt(pow(entity->getEntityPosition().x() - getEntityPosition().x(), 2) 
+		   + pow(entity->getEntityPosition().y() - getEntityPosition().y(), 2));
+		
+		}
+		++it;
+
+	}
 }
 
 void QDynamicEntity::setAge(qreal age)

@@ -10,7 +10,6 @@ QStaticEntity::QStaticEntity(QPointF const& position, qreal scale, QBrush const&
 	mGrowingSpeed(0.0),
 	mCurrentMaturationStage(0.0),
 	mReadyToEat(false),
-	mIsEdible(false),
 	mGrows(false)
 {
 

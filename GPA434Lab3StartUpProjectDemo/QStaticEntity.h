@@ -31,7 +31,6 @@ public:
 protected:
 
 	bool mReadyToEat;
-	bool mIsEdible;
 	bool mGrows;
 
 };
