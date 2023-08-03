@@ -20,19 +20,22 @@ public:
 	static qreal warp(qreal value, qreal begin, qreal end);
 	void warp(QPointF& point);
 	
+	void dynamicEntitiesInRange();
+	void sameFamily(bool sameFamily);	//dans entities?
+	void pickNearest();
+	void approach();
+
 	void wander(int phase);
 	virtual void ageIncrement()=0;
 
-
+	QList<QGraphicsItem*> mEntitiesInRange;
 
 	//QList<QDynamicEntities*> mDynamicEntities; //liste de toutes les animaux
 	//void DynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange);		//fonction qui verifie les animaux a proximite
-	//void seekFood(QList<QGraphicsItem*>& dynamicEntityInRange);						//cherche nourriture
-	//void pickNearest(QList<QGraphicsItem*>& dynamicEntityInRange);
+	virtual void seekFood() = 0;						//cherche nourriture
 	//void mate(QList<QGraphicsItem*>& dynamicEntityInRange);
 	//void approach(QList<QGraphicsItem*>& dynamicEntityInRange);
 	//void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange);
-	//void sameFamily(QList<QGraphicsItem*>& dynamicEntityInRange, bool sameFamily);	//dans entities?
 	//void pickWeakest(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;				//dans wolf?
 
 
@@ -45,7 +48,6 @@ public:
 	void setHeat(bool heat);
 
 	/*****getter**********/
-
 	qreal getAge() const;
 	qreal getHunger() const;
 	qreal getSpeed() const;
@@ -83,7 +85,7 @@ public:
 	
 	void advance(int phase) override;    
 	void ageIncrement() override;
-
+	void seekFood() override;
 };
 
 
@@ -98,6 +100,7 @@ public:
 
 	void advance(int phase) override;
 	void ageIncrement() override;
+	void seekFood() override;
 
 
 

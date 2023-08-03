@@ -264,7 +264,7 @@ void GPA434Lab3StartUpProjectDemo::stopSimulation()
 
 void GPA434Lab3StartUpProjectDemo::about()
 {
-	QMessageBox::about(this, "À propos...", sAboutText);
+	QMessageBox::about(this, "In this simulation ", sAboutText);
 }
 
 

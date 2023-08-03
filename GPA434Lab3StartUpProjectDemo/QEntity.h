@@ -7,17 +7,20 @@
 #include <QPen>
 #include <QPainter>
 #include <QGraphicsScene>
-
+#include <QGraphicsEllipseItem>
+#include <QList>
 class QEntity : public QGraphicsItem
 {
 protected:
 
 
 	QString mFamilyId;
+
 	QColor mColor;		//variable pour la couleur de l'entite
 	QBrush mBrush;		//variable pour le brush
 	QPolygonF mShape;	//variable pour la forme de l'entite
 	QPointF mPosition;	//variable pour la position de l'entite
+	QPainterPath mLineOfSight;
 	QPen mQPen;
 	//QPainterPath mQEntityShape;
 
@@ -36,8 +39,8 @@ public:
 	/********************Fonction que les animaux et les plantes partagent*************************************/
 
 	virtual bool isAlive() = 0;												//
-	
-
+	const QString& getFamilyId() const;
+	const QPointF& getEntityPosition() const;
 	
 	
 	//virtual QList<QGraphicsItem*> entitiesInRange() = 0;

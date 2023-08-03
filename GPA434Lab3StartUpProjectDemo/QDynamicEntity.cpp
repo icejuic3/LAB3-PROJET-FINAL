@@ -16,7 +16,6 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, 
 	mAttackValue{1},
 	mInHeat{0},
 	mNewOrientation{0}
-
 {
 	setRotation(initialOrientationDegrees);
 }
@@ -44,6 +43,16 @@ void QDynamicEntity::warp(QPointF& point)
 {
 	point.setX(warp(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
 	point.setY(warp(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
+
+}
+
+void QDynamicEntity::dynamicEntitiesInRange()
+{
+	mEntitiesInRange = scene()->items(mLineOfSight);
+}
+
+void QDynamicEntity::approach()
+{
 
 }
 
@@ -76,6 +85,30 @@ void QDynamicEntity::wander(int phase)
 
 
 
+void QDynamicEntity::sameFamily(bool sameFamily)
+{
+	for (auto it = mEntitiesInRange.begin(); it != mEntitiesInRange.end(); ++it) {
+		QGraphicsItem* item = *it;
+
+		QEntity* entity = dynamic_cast<QEntity*>(item);
+		if (entity&& sameFamily) {
+			if (entity->getFamilyId() == getFamilyId()) {
+				//mEntitiesInRange.append(entity);
+			}
+			else if (entity && !sameFamily) {
+				it = mEntitiesInRange.erase(it);
+			}
+			
+		}
+	}
+
+}
+
+void QDynamicEntity::pickNearest()
+{
+
+}
+
 void QDynamicEntity::setAge(qreal age)
 {
 	mCurrentAge = age;
@@ -100,6 +133,7 @@ void QDynamicEntity::setHeat(bool heat)
 {
 	mInHeat = heat;
 }
+
 
 qreal QDynamicEntity::getAge() const
 {
@@ -136,12 +170,18 @@ QWolf::QWolf(QPointF const& position = QPointF(),qreal age, qreal scale, qreal s
 	:QDynamicEntity(position,age,scale,speed,initialOrientationDegrees,brush,parent)
 {
 
+	mFamilyId = "wolf";
 
+	mLineOfSight.addEllipse(mPosition,50,50);
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
+
 }
 
 void QWolf::advance(int phase)
 {
+	if (mCurrentHunger < mMaxHunger) {
+		seekFood();
+	}
 	wander(phase);
 
 }
@@ -151,12 +191,20 @@ void QWolf::ageIncrement()
 	mCurrentAge += 0.050;
 }
 
+void QWolf::seekFood()
+{
+	dynamicEntitiesInRange();
+	pickNearest();
+
+}
+
 
 /**********************************************Fonctions Lapin*********************************************************************/
 
 QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
 	:QDynamicEntity(position, age, scale, speed, initialOrientationDegrees, brush, parent)
 {
+	mFamilyId = "rabbit";
 
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
 
@@ -174,4 +222,8 @@ void QRabbit::ageIncrement()
 {
 	mCurrentAge += 0.030;
 
+}
+
+void QRabbit::seekFood()
+{
 }

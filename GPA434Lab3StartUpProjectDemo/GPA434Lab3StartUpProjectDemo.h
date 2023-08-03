@@ -36,7 +36,6 @@ private:
 	QParameters* mParameters;
 	QControlBar* mControlBar;
 	QPushButton* mAboutButton;
-
 	QTimer mTimer;
 
 	// Fonctions utilitaires de génération de valeurs aléatoires : devraient être ailleurs.

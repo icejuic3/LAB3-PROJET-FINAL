@@ -14,7 +14,6 @@ QStaticEntity::QStaticEntity(QPointF const& position, qreal scale, QBrush const&
 	mGrows(false)
 {
 
-
 }
 
 bool QStaticEntity::isAlive()
@@ -29,7 +28,7 @@ QHerb::QHerb(QPointF const& position, qreal scale, QBrush const& brush, QStaticE
 
 		
 {
-	
+	mFamilyId = "herb";
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(1, 1) << QPointF(0, 1);	//affiche un petit carre pour representer l'herbe
 
 }

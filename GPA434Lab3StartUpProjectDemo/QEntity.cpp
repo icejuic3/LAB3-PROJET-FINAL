@@ -29,4 +29,14 @@ QRectF QEntity::boundingRect() const
     return mShape.boundingRect();
 }
 
+const QString& QEntity::getFamilyId() const
+{
+    return mFamilyId; 
+}
+
+const QPointF& QEntity::getEntityPosition() const
+{
+    return mPosition;
+}
+
 
