@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QEntity.h"
+#include "QStaticEntity.h"
 
 
 class QDynamicEntity : public QEntity
@@ -11,32 +12,33 @@ public:
 	~QDynamicEntity() override = default;
 
 
-
-
 	//les fonctions que les animaux partagent en commun
 
 	bool isAlive() override;
 
 	static qreal warp(qreal value, qreal begin, qreal end);
 	void warp(QPointF& point);
-	
-	void dynamicEntitiesInRange();
-	void sameFamily(bool sameFamily);	//dans entities?
-	void pickNearest();
-	void approach();
-
 	void wander(int phase);
-	virtual void ageIncrement()=0;
+	
 
-	QList<QGraphicsItem*> mEntitiesInRange;
+	void entitiesInRange();		//fontion qui detecte les entites dans mon rayon de detection
 
-	//QList<QDynamicEntities*> mDynamicEntities; //liste de toutes les animaux
-	//void DynamicEntitiesInRange(QList<QGraphicsItem*>& entitiesInRange);		//fonction qui verifie les animaux a proximite
+	void sameFamily();					//fontion pour filtrer les creatures de la meme famille
+	void filterPrey();					//fonction filtre pourn les proies
+
+
+	QEntity* pickNearest();					//retourne l'adresse de l'entite la plus proche?
+	void approach(QEntity* targetEntity);					//se deplace vers l'entite la plus proche
+
+	
+	virtual void statusChange()=0;
 	virtual void seekFood() = 0;						//cherche nourriture
-	//void mate(QList<QGraphicsItem*>& dynamicEntityInRange);
-	//void approach(QList<QGraphicsItem*>& dynamicEntityInRange);
-	//void consumeNutrient(QList<QGraphicsItem*>& dynamicEntityInRange);
-	//void pickWeakest(QList<QGraphicsItem*>& dynamicEntityInRange) = 0;				//dans wolf?
+
+	virtual bool isPrey(QEntity const * entity) const = 0;
+
+	
+
+
 
 
 	/******setter*********/
@@ -58,6 +60,11 @@ public:
 
 
 protected:
+
+	
+	
+
+	QString mPreyId;	
 	qreal const mMaxAge;
 	qreal mCurrentAge;
 	qreal const mMaxHunger;
@@ -84,8 +91,11 @@ public:
 
 	
 	void advance(int phase) override;    
-	void ageIncrement() override;
+	void statusChange() override;
 	void seekFood() override;
+
+	bool isPrey(QEntity const* entity) const override;
+
 };
 
 
@@ -99,10 +109,10 @@ public:
 	
 
 	void advance(int phase) override;
-	void ageIncrement() override;
+	void statusChange() override;
 	void seekFood() override;
 
-
+	bool isPrey(QEntity const* entity) const override;
 
 };
 

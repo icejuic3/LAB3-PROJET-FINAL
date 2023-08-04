@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QGraphicsItem>
 #include "QEntity.h"
 
 
@@ -15,7 +14,6 @@ public:
 
 	/***************Fonction visuelle************************/
 
-
 	/*********************************************************/
 	bool isAlive() override;
 
@@ -24,7 +22,6 @@ public:
 	qreal mMaxFoodValue;
 	qreal mCurrentFoodValue;
 
-	qreal mGrowingSpeed;
 	qreal mCurrentMaturationStage;
 
 
@@ -47,10 +44,6 @@ public:
 	
 
 	void advance(int phase) override;
-
-
-
-
 
 
 	/**************************Les fonctions visuelles***********************************************/
@@ -83,25 +76,21 @@ protected:
 };
 
 
-//class QCarot : public QStaticEntity
-//{
-//
-//	QCarot();
-//
-//public:
-//
-//	QPainterPath shape() const override;
-//	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
-//	QPainterPath opaqueArea() const override;
-//
-//	void advance(int phase) override;
-//	void checkStatus(QList<QGraphicsItem*>& predatorList) override;
-//	bool isAlive() override;
-//	QList<QGraphicsItem*> entitiesInRange() override;
-//
-//	void detectCollision(QList<QGraphicsItem*>& dynamicEntityInRange) override;
-//
-//};
+class QCarrot : public QStaticEntity
+{
+
+public:
+
+	QCarrot(QPointF const& position, qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity* parent = nullptr);
+	~QCarrot() override = default;
+
+
+
+	void advance(int phase) override;
+
+
+
+};
 
 
 //class QBody : public QStaticEntity 

@@ -7,7 +7,7 @@
 QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
 	mCurrentAge{age},	//tout les animaux vont etre initialise avec ces valeurs
-	mMaxAge{25},
+	mMaxAge{100},
 	mMaxHunger{30},
 	mCurrentHunger{mMaxHunger},
 	mCurrentSpeed{ speed },
@@ -23,7 +23,7 @@ QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, 
 bool QDynamicEntity::isAlive()
 {
 
-	if (mCurrentAge >= mMaxAge || mCurrentHunger <= 0) {
+	if (mCurrentAge >= mMaxAge /* || mCurrentHunger <= 0*/ ) {
 
 		return false;
 	}
@@ -46,13 +46,40 @@ void QDynamicEntity::warp(QPointF& point)
 
 }
 
-void QDynamicEntity::dynamicEntitiesInRange()
+void QDynamicEntity::entitiesInRange()
 {
 	mEntitiesInRange = scene()->items(mLineOfSight);
 }
 
-void QDynamicEntity::approach()
+void QDynamicEntity::approach(QEntity* targetEntity)
 {
+
+	if (!targetEntity) return; // S'assurer que l'entité cible n'est pas nulle
+
+	// Obtenir les positions actuelles
+	QPointF currentPosition = pos();
+	QPointF targetPosition = targetEntity->pos();
+
+	// Calculer la direction vers l'entité cible
+	QPointF direction = targetPosition - currentPosition;
+	qreal distance = std::sqrt(direction.x() * direction.x() + direction.y() * direction.y());
+
+	// Normaliser la direction
+	direction /= distance;
+
+	// Déterminer la nouvelle position selon la direction et la vitesse actuelle
+	QPointF newPosition = currentPosition + direction * (2*mCurrentSpeed);
+
+	// Si la nouvelle position est à l'extérieur de la scène, la téléporter à la région opposée de la scène
+	warp(newPosition);
+
+	// Appliquer la nouvelle position
+	setPos(newPosition);
+
+	// Ajuster l'orientation pour faire face à la cible
+	qreal angle = std::atan2(-direction.y(), direction.x()) * 180 / M_PI;
+	setRotation(angle);
+
 
 }
 
@@ -79,58 +106,100 @@ void QDynamicEntity::wander(int phase)
 
 		// Plus vieux... le temps fil si rapidement...
 
-		ageIncrement();
+		statusChange();
 	}
+	
 }
 
 
 
-void QDynamicEntity::sameFamily(bool sameFamily)
+void QDynamicEntity::sameFamily()
 {
 
+	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+	{
 
-	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();){
-
-		QGraphicsItem* item = *it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
+		//QGraphicsItem item = it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
 		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
 
-		QEntity* entity = dynamic_cast<QEntity*>(item);
+		QEntity* entity = dynamic_cast<QEntity*>(*it);
 
-		if (entity && sameFamily) {
-			if (entity->getFamilyId() == getFamilyId()) {
-				//mEntitiesInRange.append(entity);
 
-			}
-			else if (entity && !sameFamily) {
-				it = mEntitiesInRange.erase(it); // vient deleter lentite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
-				// on reactualise le pointeur a it 
-			}
-
+		if (typeid(entity) != typeid(this)) {	//si pas du meme type
+			it = mEntitiesInRange.erase(it); // vient deleter l'entite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
+			// on reactualise le pointeur a it 
+		}
+		else 
+		{
+		++it;
 
 		}
-		++it;
+		
 	}
 }
-void QDynamicEntity::pickNearest()
+
+
+
+void QDynamicEntity::filterPrey()	
 {
+
+	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+	{
+
+		QEntity* entity = dynamic_cast<QEntity*>(*it);
+
+
+		if (entity && !isPrey(entity))
+		{	
+
+			it = mEntitiesInRange.erase(it); 
+
+		}
+		else
+		{
+
+		++it;
+		}
+
+	}
+
+}
+
+
+
+
+QEntity* QDynamicEntity::pickNearest()
+{
+
+	qreal nearestDistance= std::numeric_limits<qreal>::max();;
+	QEntity* nearestEntity= nullptr;
 
 	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
 	{
 		QGraphicsItem* item = *it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
 		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
 
+
 		QEntity* entity = dynamic_cast<QEntity*>(item);
 
-
 		if(entity && entity!=this){
-		sqrt(pow(entity->getEntityPosition().x() - getEntityPosition().x(), 2) 
-		   + pow(entity->getEntityPosition().y() - getEntityPosition().y(), 2));
-		
+
+			QLineF line(getEntityPosition(), entity->getEntityPosition());
+			qreal distance = line.length();
+
+
+			if (distance < nearestDistance) {
+
+				nearestDistance = distance;
+				nearestEntity = entity;
+			}
 		}
 		++it;
-
 	}
+	return nearestEntity;
 }
+
+
 
 void QDynamicEntity::setAge(qreal age)
 {
@@ -193,32 +262,46 @@ QWolf::QWolf(QPointF const& position = QPointF(),qreal age, qreal scale, qreal s
 	:QDynamicEntity(position,age,scale,speed,initialOrientationDegrees,brush,parent)
 {
 
-	mFamilyId = "wolf";
+	
 
-	mLineOfSight.addEllipse(mPosition,50,50);
+	mLineOfSight.addEllipse(mPosition,250,250);
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
 
 }
 
 void QWolf::advance(int phase)
 {
-	if (mCurrentHunger < mMaxHunger) {
+	if (mCurrentHunger < mMaxHunger/2)
+	{
+
+		filterPrey();
+
 		seekFood();
+
 	}
 	wander(phase);
-
+	mEntitiesInRange.clear(); //a changer de place
 }
 
-void QWolf::ageIncrement()
+void QWolf::statusChange()
 {
 	mCurrentAge += 0.050;
+	mCurrentHunger -= 0.1;
+
+
 }
 
 void QWolf::seekFood()
 {
-	dynamicEntitiesInRange();
-	pickNearest();
+	entitiesInRange();
+	approach(pickNearest());
 
+
+}
+
+bool QWolf::isPrey(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QRabbit*>(entity));
 }
 
 
@@ -227,7 +310,7 @@ void QWolf::seekFood()
 QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
 	:QDynamicEntity(position, age, scale, speed, initialOrientationDegrees, brush, parent)
 {
-	mFamilyId = "rabbit";
+	
 
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
 
@@ -237,11 +320,11 @@ void QRabbit::advance(int phase)
 {
 	wander(phase);
 
-
+	mEntitiesInRange.clear();	//a changer de place 
 }
 
 
-void QRabbit::ageIncrement()
+void QRabbit::statusChange()
 {
 	mCurrentAge += 0.030;
 
@@ -250,3 +333,11 @@ void QRabbit::ageIncrement()
 void QRabbit::seekFood()
 {
 }
+
+bool QRabbit::isPrey(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QCarrot*>(entity));
+	//return false;
+}
+
+

@@ -2,7 +2,6 @@
 
 QEntity::QEntity(QPointF const& position, qreal scale, QBrush const& brush, QGraphicsItem* parent)
     : QGraphicsItem(parent)
-    , mFamilyId{ "entity" }
     , mQPen{ Qt::black }
     , mPosition{ position }
     , mColor{ Qt::white }
@@ -29,10 +28,6 @@ QRectF QEntity::boundingRect() const
     return mShape.boundingRect();
 }
 
-const QString& QEntity::getFamilyId() const
-{
-    return mFamilyId; 
-}
 
 const QPointF& QEntity::getEntityPosition() const
 {

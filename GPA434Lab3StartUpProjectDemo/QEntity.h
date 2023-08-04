@@ -9,25 +9,27 @@
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <QList>
+
+
+
 class QEntity : public QGraphicsItem
 {
 protected:
-
-
-	QString mFamilyId;
 
 	QColor mColor;		//variable pour la couleur de l'entite
 	QBrush mBrush;		//variable pour le brush
 	QPolygonF mShape;	//variable pour la forme de l'entite
 	QPointF mPosition;	//variable pour la position de l'entite
-
-	QPainterPath mLineOfSight; //distance de vision pour une entite
-
 	QPen mQPen;
-	//QPainterPath mQEntityShape;
+	
+	QList<QGraphicsItem*> mEntitiesInRange;
+	QPainterPath mLineOfSight; //distance de vision pour une entite
 
 
 public:
+
+
+
 	QEntity(QPointF const& position = QPointF(), qreal scale = 1.0, QBrush const& brush = Qt::white, QGraphicsItem*parent = nullptr);
 	~QEntity() = default;
 	
@@ -41,8 +43,9 @@ public:
 	/********************Fonction que les animaux et les plantes partagent*************************************/
 
 	virtual bool isAlive() = 0;												//
-	const QString& getFamilyId() const;
 	const QPointF& getEntityPosition() const;
+	//virtual bool isPrey(QEntity const* entity) const = 0;
+	//virtual void entitiesInRange() = 0;		//fontion qui detecte les entites dans mon rayon de detection
 	
 	
 	//virtual QList<QGraphicsItem*> entitiesInRange() = 0;
