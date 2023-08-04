@@ -3,6 +3,8 @@
 #include <QRandomGenerator>
 #include <QtMath>
 #include <cmath>
+#include <typeinfo>
+#include <string.h>
 
 QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
@@ -129,12 +131,10 @@ void QDynamicEntity::sameFamily()
 			it = mEntitiesInRange.erase(it); // vient deleter l'entite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
 			// on reactualise le pointeur a it 
 		}
-		else 
-		{
-		++it;
+		else if (std::string(typeid(*entity).name()) != (std::string(typeid(*this).name()))){
 
 		}
-		
+		++it;
 	}
 }
 
