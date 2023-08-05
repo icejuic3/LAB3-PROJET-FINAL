@@ -30,9 +30,9 @@ bool QDynamicEntity::isAlive()
 {
 	if (mAlive)
 	{
-		if (mCurrentAge >= mMaxAge  || mCurrentHunger <= 0) {
+		if (mCurrentAge >= mMaxAge || mCurrentHunger <= 0) {
 
-			mAlive = false;
+			mAlive = 0;
 			return mAlive;
 		}
 		return mAlive;
@@ -247,8 +247,8 @@ QWolf::QWolf(QPointF const& position = QPointF(), qreal age, qreal hunger, qreal
 void QWolf::statusChange()
 {
 	mCurrentAge += 0.050;
-	mCurrentHunger -= 0.1;
-	mInHeat += 0.05;
+	mCurrentHunger -= 0.09;
+	mInHeat += 0.08;
 }
 
 
@@ -274,7 +274,7 @@ QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal hunger, q
 
 void QRabbit::statusChange()
 {
-	mCurrentAge += 0.025;
+	mCurrentAge += 0.035;
 	mCurrentHunger -= 0.05;
 	mInHeat += 0.15;
 }

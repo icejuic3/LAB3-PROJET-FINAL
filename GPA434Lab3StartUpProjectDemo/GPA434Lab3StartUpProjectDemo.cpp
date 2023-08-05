@@ -155,10 +155,11 @@ void GPA434Lab3StartUpProjectDemo::advance()
 			int choiceIndex = mDistrib(mGen);
 			int choice = choices[choiceIndex];
 
+			mGraphicsScene.removeItem(entity);
+
 			if (dynamic_cast<QWolf*>(entity)) {
 
 				addToSimulation(choice, entity);
-
 			}
 			else if (dynamic_cast<QRabbit*>(entity)) {
 
@@ -168,13 +169,10 @@ void GPA434Lab3StartUpProjectDemo::advance()
 
 				addToSimulation(choice, entity);
 			}
-
-			mGraphicsScene.removeItem(entity);
 			delete entity;
 		}
 		else if(entity && entity->isBorn())
 		{
-
 			if (dynamic_cast<QWolf*>(entity)) {
 
 				addToSimulation(1, entity);
@@ -188,9 +186,6 @@ void GPA434Lab3StartUpProjectDemo::advance()
 
 				addToSimulation(3, entity);
 			}
-
-
-
 		}
 	}
 }
