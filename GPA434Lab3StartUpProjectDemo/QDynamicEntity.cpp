@@ -5,84 +5,42 @@
 #include <cmath>
 #include <typeinfo>
 #include <string.h>
+#include "QStaticEntity.h"
 
-QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
+
+QDynamicEntity::QDynamicEntity(QPointF const& position, qreal age, qreal hunger, qreal heat, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QEntity* parent)
 	:QEntity(position, scale, brush, parent),
 	mCurrentAge{age},	//tout les animaux vont etre initialise avec ces valeurs
-	mMaxAge{100},
-	mMaxHunger{30},
-	mCurrentHunger{mMaxHunger},
+	mMaxAge{80},
+	mMaxHunger{75},
+	mCurrentHunger{hunger},
 	mCurrentSpeed{ speed },
 	mMaxHealth{5},
 	mCurrentHealth{mMaxHealth},
-	mAttackValue{1},
-	mInHeat{0},
-	mNewOrientation{0}
+	mInHeat{ heat },
+	mHeatThreshold{50},
+	mNewOrientation{0},
+	targetAnimal{nullptr}
+
 {
 	setRotation(initialOrientationDegrees);
 }
 
 bool QDynamicEntity::isAlive()
 {
+	if (mAlive)
+	{
+		if (mCurrentAge >= mMaxAge  || mCurrentHunger <= 0) {
 
-	if (mCurrentAge >= mMaxAge /* || mCurrentHunger <= 0*/ ) {
-
-		return false;
+			mAlive = false;
+			return mAlive;
+		}
+		return mAlive;
 	}
+	else{
 
-	return true;
-	
-}
-
-qreal QDynamicEntity::warp(qreal value, qreal begin, qreal end)
-{
-	qreal const width = end - begin;
-	return value - qFloor((value - begin) / width) * width;
-
-}
-
-void QDynamicEntity::warp(QPointF& point)
-{
-	point.setX(warp(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
-	point.setY(warp(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
-
-}
-
-void QDynamicEntity::entitiesInRange()
-{
-	mEntitiesInRange = scene()->items(mLineOfSight);
-}
-
-void QDynamicEntity::approach(QEntity* targetEntity)
-{
-
-	if (!targetEntity) return; // S'assurer que l'entité cible n'est pas nulle
-
-	// Obtenir les positions actuelles
-	QPointF currentPosition = pos();
-	QPointF targetPosition = targetEntity->pos();
-
-	// Calculer la direction vers l'entité cible
-	QPointF direction = targetPosition - currentPosition;
-	qreal distance = std::sqrt(direction.x() * direction.x() + direction.y() * direction.y());
-
-	// Normaliser la direction
-	direction /= distance;
-
-	// Déterminer la nouvelle position selon la direction et la vitesse actuelle
-	QPointF newPosition = currentPosition + direction * (2*mCurrentSpeed);
-
-	// Si la nouvelle position est à l'extérieur de la scène, la téléporter à la région opposée de la scène
-	warp(newPosition);
-
-	// Appliquer la nouvelle position
-	setPos(newPosition);
-
-	// Ajuster l'orientation pour faire face à la cible
-	qreal angle = std::atan2(-direction.y(), direction.x()) * 180 / M_PI;
-	setRotation(angle);
-
-
+		return mAlive;
+	}
 }
 
 void QDynamicEntity::wander(int phase)
@@ -110,146 +68,166 @@ void QDynamicEntity::wander(int phase)
 
 		statusChange();
 	}
-	
+
 }
 
-
-
-void QDynamicEntity::sameFamily()
+qreal QDynamicEntity::warp(qreal value, qreal begin, qreal end)
 {
-
-	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
-	{
-
-		//QGraphicsItem item = it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
-		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
-
-		QEntity* entity = dynamic_cast<QEntity*>(*it);
-
-
-		if (typeid(entity) != typeid(this)) {	//si pas du meme type
-			it = mEntitiesInRange.erase(it); // vient deleter l'entite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
-			// on reactualise le pointeur a it 
-		}
-		else if (std::string(typeid(*entity).name()) != (std::string(typeid(*this).name()))){
-
-		}
-		++it;
-	}
+	qreal const width = end - begin;
+	return value - qFloor((value - begin) / width) * width;
 }
 
+void QDynamicEntity::warp(QPointF& point)
+{
+	point.setX(warp(point.x(), scene()->sceneRect().left(), scene()->sceneRect().right()));
+	point.setY(warp(point.y(), scene()->sceneRect().top(), scene()->sceneRect().bottom()));
+}
 
-
-void QDynamicEntity::filterPrey()	
+QEntity* QDynamicEntity::pickNearest(int status)
 {
 
-	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+	qreal nearestDistance = std::numeric_limits<qreal>::max();
+	QEntity* nearestEntity{ nullptr };
+
+	for (auto& item : scene()->items())
 	{
 
-		QEntity* entity = dynamic_cast<QEntity*>(*it);
+		QEntity* entity{ dynamic_cast<QEntity*>(item) };
 
 
-		if (entity && !isPrey(entity))
-		{	
-
-			it = mEntitiesInRange.erase(it); 
-
-		}
-		else
+		if (entity && entity != this && isPrey(entity) && status == 1)
 		{
-
-		++it;
-		}
-
-	}
-
-}
-
-
-
-
-QEntity* QDynamicEntity::pickNearest()
-{
-
-	qreal nearestDistance= std::numeric_limits<qreal>::max();;
-	QEntity* nearestEntity= nullptr;
-
-	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
-	{
-		QGraphicsItem* item = *it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
-		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
-
-
-		QEntity* entity = dynamic_cast<QEntity*>(item);
-
-		if(entity && entity!=this){
-
-			QLineF line(getEntityPosition(), entity->getEntityPosition());
+			QLineF line(pos(), entity->pos());
 			qreal distance = line.length();
 
+			if (distance < nearestDistance)
+			{
 
-			if (distance < nearestDistance) {
+				nearestDistance = distance;
+				nearestEntity = entity;
+			}
+
+		}
+
+		//&& typeid(entity) == typeid(this)
+		else if (entity && entity != this && isFamily(entity) && status == 2)
+		{
+			QLineF line(pos(), entity->pos());
+			qreal distance = line.length();
+
+			if (distance < nearestDistance)
+			{
 
 				nearestDistance = distance;
 				nearestEntity = entity;
 			}
 		}
-		++it;
 	}
+
 	return nearestEntity;
 }
 
-
-
-void QDynamicEntity::setAge(qreal age)
+void QDynamicEntity::approach(QEntity* targetEntity)
 {
-	mCurrentAge = age;
+
+	if (!targetEntity) {
+		return; // S'assurer que l'entité cible n'est pas nulle
+	}
+		
+	// Obtenir les positions actuelles
+	QPointF currentPosition = pos();
+	QPointF targetPosition = targetEntity->pos();
+
+	// Calculer la direction vers l'entité cible
+	QPointF direction = targetPosition - currentPosition;
+	qreal distance = std::sqrt(direction.x() * direction.x() + direction.y() * direction.y());
+
+	// Normaliser la direction
+	direction /= distance;
+
+	// Déterminer la nouvelle position selon la direction et la vitesse actuelle
+	QPointF newPosition = currentPosition + direction * (3*mCurrentSpeed);
+
+	// Si la nouvelle position est à l'extérieur de la scène, la téléporter à la région opposée de la scène
+	warp(newPosition);
+
+	// Appliquer la nouvelle position
+	setPos(newPosition);
+
+	// Ajuster l'orientation pour faire face à la cible
+	qreal angle = std::atan2(-direction.y(), direction.x()) * 180 / M_PI;
+	setRotation(angle);
 }
 
-void QDynamicEntity::setHunger(qreal hunger)
+void QDynamicEntity::advance(int phase)
 {
-	mCurrentHunger = hunger;
-}
+	mBorn = 0;
 
-void QDynamicEntity::setSpeed(qreal speed)
-{
-	mCurrentSpeed = speed;
-}
+	if (phase == 0)
+	{
 
-void QDynamicEntity::setHealth(qreal health)
-{
-	mCurrentHealth = health;
-}
+		if (mCurrentHunger <= mMaxHunger / 2)
+		{
+			status = 1;
+			targetEntity = pickNearest(status);	//retourne la proie la plus proche
 
-void QDynamicEntity::setHeat(bool heat)
-{
-	mInHeat = heat;
-}
+			if (!targetEntity) {
+				wander(phase);
+			}
+		}
+		else if (mInHeat >=mHeatThreshold)
+		{
+			status = 2;
+			targetEntity = pickNearest(status);	//retourne le membre de famille le plus proche
 
+			if (!targetEntity) {
+				wander(phase);
+			}
+		}
+		else
+		{
+			status = 0; 
 
-qreal QDynamicEntity::getAge() const
-{
-	return mCurrentAge;
-}
+			wander(phase);
 
-qreal QDynamicEntity::getHunger() const
-{
-	return mCurrentHunger;
-}
+		}
+	}
+	else if (phase == 1)
+	{
 
-qreal QDynamicEntity::getSpeed() const
-{
-	return mCurrentSpeed;
-}
+		if (status != 0 && targetEntity)
+		{
 
-qreal QDynamicEntity::getHealth() const
-{
-	return mCurrentHealth;
-}
+			approach(targetEntity);
+			
+			for (auto item : collidingItems())
+			{
+				QEntity* ptr{ dynamic_cast<QEntity*>(item) };
+				QDynamicEntity* animal{ (dynamic_cast<QDynamicEntity*>(item)) };
 
-bool QDynamicEntity::getHeat() const
-{
-	return mInHeat;
+				if (ptr && isPrey(ptr) && status == 1)
+				{
+
+					ptr->mAlive = false;
+					mCurrentHunger = mMaxHunger;
+
+				}
+				else if (animal && isFamily(animal) && status == 2)
+				{
+					mInHeat = 0;
+					mBorn = 1;
+					animal->mInHeat = 0;
+					isBorn();
+				}
+			}
+		}
+		else	
+		{
+			wander(phase);
+		}
+		// Plus vieux... le temps fil si rapidement...
+		statusChange();
+	}
 }
 
 
@@ -258,86 +236,201 @@ bool QDynamicEntity::getHeat() const
 /*****************************************Fonction Loup***********************************************************************/
 
 
-QWolf::QWolf(QPointF const& position = QPointF(),qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
-	:QDynamicEntity(position,age,scale,speed,initialOrientationDegrees,brush,parent)
+QWolf::QWolf(QPointF const& position = QPointF(), qreal age, qreal hunger, qreal heat, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(position,age,hunger,heat,scale,speed,initialOrientationDegrees,brush,parent)
 {
-
-	
-
-	mLineOfSight.addEllipse(mPosition,250,250);
 	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
-
 }
 
-void QWolf::advance(int phase)
-{
-	if (mCurrentHunger < mMaxHunger/2)
-	{
 
-		filterPrey();
-
-		seekFood();
-
-	}
-	wander(phase);
-	mEntitiesInRange.clear(); //a changer de place
-}
 
 void QWolf::statusChange()
 {
 	mCurrentAge += 0.050;
 	mCurrentHunger -= 0.1;
-
-
+	mInHeat += 0.05;
 }
 
-void QWolf::seekFood()
-{
-	entitiesInRange();
-	approach(pickNearest());
-
-
-}
 
 bool QWolf::isPrey(QEntity const* entity) const
 {
-	return static_cast<bool>(dynamic_cast<const QRabbit*>(entity));
+	return static_cast<bool>(dynamic_cast<const QRabbit*>(entity)) || static_cast<bool>(dynamic_cast<const QDeer*>(entity));
+}
+
+bool QWolf::isFamily(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QWolf*>(entity));
 }
 
 
 /**********************************************Fonctions Lapin*********************************************************************/
 
-QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
-	:QDynamicEntity(position, age, scale, speed, initialOrientationDegrees, brush, parent)
+QRabbit::QRabbit(QPointF const& position = QPointF(), qreal age, qreal hunger, qreal heat, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(position, age, hunger,heat, scale, speed, initialOrientationDegrees, brush, parent)
 {
-	
-
-	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le loup
-
-}
-
-void QRabbit::advance(int phase)
-{
-	wander(phase);
-
-	mEntitiesInRange.clear();	//a changer de place 
+	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le lapin
 }
 
 
 void QRabbit::statusChange()
 {
-	mCurrentAge += 0.030;
-
+	mCurrentAge += 0.025;
+	mCurrentHunger -= 0.05;
+	mInHeat += 0.15;
 }
 
-void QRabbit::seekFood()
-{
-}
+
 
 bool QRabbit::isPrey(QEntity const* entity) const
 {
 	return static_cast<bool>(dynamic_cast<const QCarrot*>(entity));
-	//return false;
 }
 
+bool QRabbit::isFamily(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QRabbit*>(entity));
+}
+
+/*****************************************Fonction Deer***********************************************************************/
+
+
+QDeer::QDeer(QPointF const& position = QPointF(), qreal age, qreal hunger, qreal heat, qreal scale, qreal speed, qreal initialOrientationDegrees, QBrush const& brush, QDynamicEntity* parent)
+	:QDynamicEntity(position, age, hunger, heat, scale, speed, initialOrientationDegrees, brush, parent)
+{
+	mShape << QPointF(0, 0) << QPointF(1, 0) << QPointF(0.5, 1);	//affiche un petit triangle pour representer le lapin
+}
+
+
+void QDeer::statusChange()
+{
+	mCurrentAge += 0.040;
+	mCurrentHunger -= 0.075;
+	mInHeat += 0.1;
+}
+
+
+bool QDeer::isPrey(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QHerb*>(entity));
+}
+
+bool QDeer::isFamily(QEntity const* entity) const
+{
+	return static_cast<bool>(dynamic_cast<const QDeer*>(entity));
+}
+
+
+
+
+
+
+
+
+
+
+
+/***************************CODE QU'ON N'UTILISE PLUS*********************************************/
+
+
+//void QDynamicEntity::entitiesInRange()
+//{
+//	mEntitiesInRange.clear();
+//
+//	QList<QGraphicsItem*> itemsInLineOfSight = scene()->items(mLineOfSight);
+//
+//	for (QGraphicsItem* item : itemsInLineOfSight)
+//	{
+//		if (item != this)
+//		{										// Si l'élément n'est pas l'entité elle-même
+//			mEntitiesInRange.append(item);		// Ajoute à la liste
+//		}
+//	}
+//
+//	//mEntitiesInRange = scene()->items(mLineOfSight);
+//
+//}
+
+
+//void QDynamicEntity::sameFamily()
+//{
+//
+//	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+//	{
+//
+//		//QGraphicsItem item = it; //je dereference mon iterateur, et je le store dans un pointer de qgraphic item
+//		// quand jutilise item, je suis en train de modifier la memoire dans ma liste
+//
+//		QEntity* entity = dynamic_cast<QEntity*>(*it);
+//
+//
+//		if (typeid(entity) != typeid(this)) {	//compare une entite par le type(seulement si elles sont de meme type)
+//
+//			it = mEntitiesInRange.erase(it); // vient deleter l'entite que je pointe dessus; vu que jai detruit mon iterateur en faisant ca
+//			// on reactualise le pointeur a it 
+//		}
+//		else if (std::string(typeid(*entity).name()) != (std::string(typeid(*this).name()))){ //compare une entite par le nom du type donc on peut comparer des entite de type different
+//
+//
+//
+//		}
+//		++it;
+//	}
+//}
+
+
+//void QDynamicEntity::filterPrey()	
+//{
+//
+//	for (QList<QGraphicsItem*>::iterator it = mEntitiesInRange.begin(); it != mEntitiesInRange.end();)
+//	{
+//
+//		QEntity* entity = dynamic_cast<QEntity*>(*it);
+//
+//		if (entity && !isPrey(entity))	//
+//		{	
+//			it = mEntitiesInRange.erase(it); 
+//		}
+//		else
+//		{
+//		++it;
+//		}
+//	}
+//}
+
+//QEntity* QDynamicEntity::entityDetected()
+//{
+//
+//	//for (QGraphicsItem* item : mEntitiesInRange)
+//	for (auto& item : scene()->items())
+//	{
+//		QEntity* entity = dynamic_cast<QEntity*>(item);
+//
+//		// Vérifier si l'entité n'est pas nulle et si elle n'est pas le loup lui-même
+//		if (entity && entity != this)
+//		{
+//			// Vérifier si le loup entre en collision avec l'entité (par exemple, un lapin)
+//			if (collidesWithItem(entity))
+//			{
+//				return entity; // Collision détectée, retourner l'entité
+//			}
+//		}
+//	}
+//	return nullptr; // Aucune collision détectée
+//
+//}
+
+//void QDynamicEntity::seekFood()
+//{
+//	
+//
+//	//QEntity* detectedEntity = entityDetected();
+//	//
+//	//if (detectedEntity && isPrey(detectedEntity)) //si l'entite detecte une colision
+//	//{
+//	//	detectedEntity->mAlive = false;
+//	//
+//	//	mCurrentHunger = mMaxHunger;
+//	//}
+//	//
+//}
 

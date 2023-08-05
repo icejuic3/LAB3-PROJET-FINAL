@@ -2,12 +2,10 @@
 
 
 
-
 QStaticEntity::QStaticEntity(QPointF const& position, qreal scale, QBrush const& brush, QEntity* parent)
 	: QEntity(position, scale, brush, parent),
 	mMaxFoodValue(0.0),
 	mCurrentFoodValue(0.0),
-	mCurrentMaturationStage(0.0),
 	mReadyToEat(false),
 	mGrows(false)
 {
@@ -16,7 +14,16 @@ QStaticEntity::QStaticEntity(QPointF const& position, qreal scale, QBrush const&
 
 bool QStaticEntity::isAlive()
 {
-	return true;
+
+	if (mAlive)
+	{
+		return mAlive;
+	}
+	else if(!mAlive)
+	{
+		return false;
+	}
+
 }
 
 

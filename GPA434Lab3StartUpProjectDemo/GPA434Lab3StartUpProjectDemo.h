@@ -4,7 +4,7 @@
 #include "ui_GPA434Lab3StartUpProjectDemo.h"
 
 
-
+#include <random>
 #include <QGraphicsScene>
 #include <QTimer>
 #include "QDynamicEntity.h"
@@ -28,6 +28,8 @@ public:
     GPA434Lab3StartUpProjectDemo(QWidget *parent = nullptr);
     ~GPA434Lab3StartUpProjectDemo();
 
+	void addToSimulation(int choice, QEntity* entity);
+
 private:
     Ui::GPA434Lab3StartUpProjectDemoClass ui;
 
@@ -37,7 +39,8 @@ private:
 	QControlBar* mControlBar;
 	QPushButton* mAboutButton;
 	QTimer mTimer;
-
+	
+	
 	// Fonctions utilitaires de génération de valeurs aléatoires : devraient être ailleurs.
 	double random(qreal maxValue);
 	double random(qreal minValue, qreal maxValue);
@@ -71,21 +74,19 @@ private:
 	static QColor	const sControlPauseColor;		//    "
 	static QColor	const sControlStoppedColor;		//    "
 	static QColor	const sControlNotReadyColor;	//    "
-	static qreal	const sMinLifeExpectancy;		// Constantes liées à la création aléatoire des flèches
-	static qreal	const sMaxLifeExpectancy;		//	  "
-	static qreal	const sCenterRadius;			//    "
+	//static qreal	const sCenterRadius;			//    "
 	static qreal	const sMinOrientationDegrees;	//    "
 	static qreal	const sMaxOrientationDegrees;	//    "
 	static qreal	const sMinSpeed;				//    "
-	static qreal	const sMaxSpeed;				//    "
-	static qreal	const sMinSize;					//    "
-	static qreal	const sMaxSize;					//    "
-
+	static qreal	const sMaxSpeed;				//    "				
 	static qreal	const sMinAge;
 	static qreal	const sMaxAge;
+	static qreal	const sMinHunger;
+	static qreal	const sMaxHunger;
+	static qreal	const sMinHeat;
+	static qreal	const sMaxHeat;
 
-	
-
-
+	std::mt19937 mGen;
+	std::uniform_int_distribution<> mDistrib;
 
 };

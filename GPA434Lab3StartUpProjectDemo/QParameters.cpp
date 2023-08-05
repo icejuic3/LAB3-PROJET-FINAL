@@ -8,7 +8,7 @@
 
 QParameters::QParameters(size_t maxItems, QWidget * parent)
 	:	QWidget(parent),
-		mNbrOfItems{ new QSpinBox },	//a suprimer
+		
 
 	    mNbrOfWolves{new QSpinBox},
 	    mNbrOfRabbits{new QSpinBox},
@@ -18,29 +18,26 @@ QParameters::QParameters(size_t maxItems, QWidget * parent)
 
 
 {
-	const size_t minMaxNbr{ 10 };
+	const size_t minMaxNbr{ 2 };
 
-	mNbrOfItems->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));// a suprimer
-	mNbrOfItems->setValue(minMaxNbr);// a suprimer
 
-	mNbrOfWolves->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));
-	mNbrOfWolves->setValue(minMaxNbr);
+	mNbrOfWolves->setRange(0, qMax(static_cast<size_t>(minMaxNbr), maxItems));
+	mNbrOfWolves->setValue(4);
 
-	mNbrOfRabbits->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));
-	mNbrOfRabbits->setValue(minMaxNbr);
+	mNbrOfRabbits->setRange(0, qMax(static_cast<size_t>(minMaxNbr), maxItems));
+	mNbrOfRabbits->setValue(10);
 
-	mNbrOfDeers->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));
-	mNbrOfDeers->setValue(minMaxNbr);
+	mNbrOfDeers->setRange(0, qMax(static_cast<size_t>(minMaxNbr), maxItems));
+	mNbrOfDeers->setValue(6);
 
-	mNbrOfCarrots->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));
-	mNbrOfCarrots->setValue(minMaxNbr);
+	mNbrOfCarrots->setRange(0, qMax(static_cast<size_t>(minMaxNbr), maxItems));
+	mNbrOfCarrots->setValue(30);
 
-	mNbrOfHerbs->setRange(1, qMax(static_cast<size_t>(minMaxNbr), maxItems));
-	mNbrOfHerbs->setValue(minMaxNbr);
+	mNbrOfHerbs->setRange(0, qMax(static_cast<size_t>(minMaxNbr), maxItems));
+	mNbrOfHerbs->setValue(30);
 
 
 	QFormLayout * layout{ new QFormLayout };
-	layout->addRow("Nombre d'items ", mNbrOfItems);	// a suprimer
 
 	layout->addRow("Nombre de loups ", mNbrOfWolves);
 	layout->addRow("Nombre de lapins ", mNbrOfRabbits);
@@ -50,11 +47,6 @@ QParameters::QParameters(size_t maxItems, QWidget * parent)
 	
 	setLayout(layout);
 
-}
-
-size_t QParameters::nbrOfItems() const	// a suprimer
-{
-	return static_cast<size_t>(mNbrOfItems->value());
 }
 
 size_t QParameters::nbrOfWolves() const

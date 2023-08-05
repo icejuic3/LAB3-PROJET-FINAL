@@ -31,19 +31,25 @@ QColor	const GPA434Lab3StartUpProjectDemo::sControlRunningColor(0, 255, 0);
 QColor	const GPA434Lab3StartUpProjectDemo::sControlPauseColor(255, 196, 0);
 QColor	const GPA434Lab3StartUpProjectDemo::sControlStoppedColor(255, 0, 0);
 QColor	const GPA434Lab3StartUpProjectDemo::sControlNotReadyColor(230, 230, 230);
-qreal	const GPA434Lab3StartUpProjectDemo::sMinLifeExpectancy{ 1.0 };
-qreal	const GPA434Lab3StartUpProjectDemo::sMaxLifeExpectancy{ 10.0 };
-qreal	const GPA434Lab3StartUpProjectDemo::sCenterRadius{ 25 };
+//qreal	const GPA434Lab3StartUpProjectDemo::sCenterRadius{ 25 };
+
+
 qreal	const GPA434Lab3StartUpProjectDemo::sMinOrientationDegrees{ 0.0 };
 qreal	const GPA434Lab3StartUpProjectDemo::sMaxOrientationDegrees{ 360.0 };
+
+qreal	const GPA434Lab3StartUpProjectDemo::sMinHunger{ 15.0 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMaxHunger{ 50.0 };
+
+qreal	const GPA434Lab3StartUpProjectDemo::sMinHeat{ 0.0 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMaxHeat{ 30.0 };
+
 qreal	const GPA434Lab3StartUpProjectDemo::sMinSpeed{ 1.0 };
 qreal	const GPA434Lab3StartUpProjectDemo::sMaxSpeed{ 5.0 };
-qreal	const GPA434Lab3StartUpProjectDemo::sMinSize{ 7.5 };
-qreal	const GPA434Lab3StartUpProjectDemo::sMaxSize{ 15.0 };
+
+qreal	const GPA434Lab3StartUpProjectDemo::sMinAge{ 1.0 };
+qreal	const GPA434Lab3StartUpProjectDemo::sMaxAge{ 50.0 };
 
 
-qreal	const GPA434Lab3StartUpProjectDemo::sMinAge{ 1 };
-qreal	const GPA434Lab3StartUpProjectDemo::sMaxAge{ 15 };
 
 
 const QString GPA434Lab3StartUpProjectDemo::sAboutButtonText("À propos...");
@@ -63,12 +69,17 @@ Réalisé par :
 )..");
 
 
+
 GPA434Lab3StartUpProjectDemo::GPA434Lab3StartUpProjectDemo(QWidget *parent)
     : QMainWindow(parent)
 	, mSimulationView{ new QGraphicsView(&mGraphicsScene) }
 	, mParameters{ new QParameters(sMaxNbrOfItems) }
 	, mControlBar{ new QControlBar(Qt::Vertical) }
 	, mAboutButton{ new QPushButton(sAboutButtonText) }
+	, mGen(std::random_device{}())
+	, mDistrib{ 0,2 }
+	
+
 {
 	setWindowTitle("Startup project demo");
 	setWindowIcon(QIcon(":/StartUpProjectDemo/icon"));
@@ -128,6 +139,7 @@ GPA434Lab3StartUpProjectDemo::~GPA434Lab3StartUpProjectDemo()
 {}
 
 
+
 void GPA434Lab3StartUpProjectDemo::advance()
 {
 	mGraphicsScene.advance();
@@ -135,27 +147,126 @@ void GPA434Lab3StartUpProjectDemo::advance()
 
 	for (auto& item : mGraphicsScene.items()) {
 
-		QEntity* animal{ dynamic_cast<QEntity*>(item) };
-		if (animal && !animal->isAlive()) {
-			mGraphicsScene.removeItem(animal);
-			delete animal;
+		QEntity* entity{ dynamic_cast<QEntity*>(item) };
+
+		if (entity && !entity->isAlive())
+		{
+			int choices[] = { 4, 5 };
+			int choiceIndex = mDistrib(mGen);
+			int choice = choices[choiceIndex];
+
+			if (dynamic_cast<QWolf*>(entity)) {
+
+				addToSimulation(choice, entity);
+
+			}
+			else if (dynamic_cast<QRabbit*>(entity)) {
+
+				addToSimulation(choice, entity);
+			}
+			else if (dynamic_cast<QDeer*>(entity)) {
+
+				addToSimulation(choice, entity);
+			}
+
+			mGraphicsScene.removeItem(entity);
+			delete entity;
+		}
+		else if(entity && entity->isBorn())
+		{
+
+			if (dynamic_cast<QWolf*>(entity)) {
+
+				addToSimulation(1, entity);
+
+			}
+			else if (dynamic_cast<QRabbit*>(entity)) {
+
+				addToSimulation(2, entity);
+			}
+			else if (dynamic_cast<QDeer*>(entity)) {
+
+				addToSimulation(3, entity);
+			}
+
+
+
 		}
 	}
+}
 
 
 
+void GPA434Lab3StartUpProjectDemo::addToSimulation(int choice, QEntity* entity)
+{
+	
+	switch (choice) {
+
+	case 1:
+
+		mGraphicsScene.addItem(
+			new QWolf(entity->pos()						//position de depart
+				, random(sMinAge, sMaxAge)													//age random
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
+				, 15																		//taille du loup
+				, 1.0																		//vitess du loup	
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					//orientation
+				, QColor(Qt::black))														//couleur
+		);
+		break;
+
+	case 2:
+
+		mGraphicsScene.addItem(
+			new QRabbit(entity->pos() //position de depart
+				, random(sMinAge, sMaxAge)													 //age random
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
+				, 10																			 //taille du lapin
+				, 1.3																		 //vitess du lapin	
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					 //orientation
+				, QColor(Qt::lightGray))													 //couleur
+		);
+		break;
+
+	case 3:
+
+		mGraphicsScene.addItem(
+			new QDeer(entity->pos()
+				, random(sMinAge, sMaxAge)
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
+				, 13
+				, 1.2
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)
+				, QColor(Qt::cyan))
+		);
+		break;
+
+	case 4:
 
 
+		mGraphicsScene.addItem(
+			new QCarrot(entity->pos()
+				, 7																				
+				, QColor(Qt::yellow))
+		);
+		break;
+
+	case 5:
+
+		mGraphicsScene.addItem(
+			new QHerb(entity->pos()			//position de depart
+				, 10																				//taille herbe
+				, QColor(Qt::green))
+		);
+		break;
 
 
-//	for (auto& item : mGraphicsScene.items()) {
-//		QArrowItem* arrow{ dynamic_cast<QArrowItem*>(item) };
-//		if (arrow && !arrow->isAlive()) {
-//			mGraphicsScene.removeItem(arrow);
-//			delete arrow;
-//		}
-//	}
-//	
+	default:
+		break;
+	}
 }
 
 void GPA434Lab3StartUpProjectDemo::startSimulation()
@@ -170,74 +281,72 @@ void GPA434Lab3StartUpProjectDemo::startSimulation()
 	mGraphicsScene.addItem(background);
 
 
-
-	//for (int i{ 0 }; i < mParameters->nbrOfItems(); ++i) {
-	//	mGraphicsScene.addItem(
-	//		new QArrowItem(random(sMinLifeExpectancy, sMaxLifeExpectancy),	// espérance de vie en seconde
-	//			randomPoint(-sCenterRadius, sCenterRadius),					// ils sont tous près de l'origine au départ!
-	//			random(sMinOrientationDegrees, sMaxOrientationDegrees),		// orientation aléatoire
-	//			random(sMinSpeed, sMaxSpeed),								// vitesse aléatoire
-	//			random(sMinSize, sMaxSize),									// taille aléatoire
-	//			randomColor()));											// couleur aléatoire
-	//}
-	
 	// ajoute n Loup
-
-
 	for (int i{ 0 }; i < mParameters->nbrOfWolves(); ++i)
 	{
 		mGraphicsScene.addItem(
 			new QWolf(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)	//position de depart
 				, random(sMinAge, sMaxAge)													//age random
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
 				, 15																		//taille du loup
 				, 1.0																		//vitess du loup	
 				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					//orientation
-				, QColor(Qt::black))														//couleur
-		);
+				, QColor(Qt::black)));
 	}
 
-	
 	//ajoute n lapins
-
 	for (int j{ 0 }; j < mParameters->nbrOfRabbits(); ++j)
 	{
 		mGraphicsScene.addItem(
 			new QRabbit(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2) //position de depart
 				, random(sMinAge, sMaxAge)													 //age random
-				, 8																			 //taille du lapin
-				, 1.5																		 //vitess du lapin	
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
+				, 10																		 //taille du lapin
+				, 1.3																			 //vitess du lapin	
 				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					 //orientation
-				, QColor(Qt::lightGray))													 //couleur
+				, QColor(Qt::lightGray))
+			);
+	}
+
+	//ajoute n chevereuils
+	for (int k{ 0 }; k < mParameters->nbrOfDeers(); ++k)
+	{
+		mGraphicsScene.addItem(
+			new QDeer(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)
+				, random(sMinAge, sMaxAge)													 
+				, random(sMinHunger, sMaxHunger)
+				, random(sMinHeat, sMaxHeat)
+				, 13																			
+				, 1.2																		 
+				, random(sMinOrientationDegrees, sMaxOrientationDegrees)					 
+				, QColor(Qt::cyan))
 		);
 	}
 
-
-	//ajoute n chevereuils
-
-	for (int k{ 0 }; k < mParameters->nbrOfDeers(); ++k)
-	{
-	}
-
 	//ajoute n carrotes
-
 	for (int l{ 0 }; l < mParameters->nbrOfCarrots(); ++l)
 	{
+		mGraphicsScene.addItem(
+			new QCarrot(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)
+				, 7
+				, QColor(Qt::yellow))
+		);
 	}
 
 	//ajoutes n herbes
-
 	for (int m{ 0 }; m < mParameters->nbrOfHerbs(); ++m)
 	{
 		mGraphicsScene.addItem(
-			new QHerb(randomPoint(mGraphicsScene.width() / 2, mGraphicsScene.height() / 2)		//position de depart
-				, 10																				//taille herbe
+			new QHerb(randomPoint(mGraphicsScene.width()/2, mGraphicsScene.height()/2)		//position de depart
+				, 10																		//taille herbe
 				, QColor(Qt::green))
 		);
 	}
 	
 	// Démarre la simulation
 	mTimer.start(30);
-
 	mParameters->setEnabled(false);
 }
 
@@ -287,6 +396,6 @@ QColor GPA434Lab3StartUpProjectDemo::randomColor()
 QPointF GPA434Lab3StartUpProjectDemo::randomPoint(qreal width, qreal height)
 {
 
-	return QPointF(random(0, width), random(0, height));
+	return QPointF(random(-width/2, width), random(-height/2, height));
 }
 

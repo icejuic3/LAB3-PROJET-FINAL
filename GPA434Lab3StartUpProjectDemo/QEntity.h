@@ -22,11 +22,17 @@ protected:
 	QPointF mPosition;	//variable pour la position de l'entite
 	QPen mQPen;
 	
-	QList<QGraphicsItem*> mEntitiesInRange;
-	QPainterPath mLineOfSight; //distance de vision pour une entite
+	//QList<QGraphicsItem*> mEntitiesInRange;
+	//QPainterPath mLineOfSight; //distance de vision pour une entite
+	QEntity* targetEntity;
+
 
 
 public:
+
+	int status;
+	bool mAlive;
+	bool mBorn;
 
 
 
@@ -42,8 +48,19 @@ public:
 
 	/********************Fonction que les animaux et les plantes partagent*************************************/
 
-	virtual bool isAlive() = 0;												//
+	virtual bool isAlive() = 0;		
+	bool isBorn();
 	const QPointF& getEntityPosition() const;
+
+
+
+
+
+
+
+
+
+
 	//virtual bool isPrey(QEntity const* entity) const = 0;
 	//virtual void entitiesInRange() = 0;		//fontion qui detecte les entites dans mon rayon de detection
 	

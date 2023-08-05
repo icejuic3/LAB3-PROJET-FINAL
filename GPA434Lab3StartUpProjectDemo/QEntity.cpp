@@ -5,6 +5,11 @@ QEntity::QEntity(QPointF const& position, qreal scale, QBrush const& brush, QGra
     , mQPen{ Qt::black }
     , mPosition{ position }
     , mColor{ Qt::white }
+    , mAlive{1}
+    , mBorn{0}
+    , status{}
+    ,targetEntity{nullptr}
+  
 {
     setScale(scale);
     setPos(position);
@@ -16,6 +21,8 @@ void QEntity::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     painter->setPen(Qt::NoPen);
     painter->setBrush(mBrush);
     painter->drawPolygon(mShape);
+    
+
 }
 
 void QEntity::setColor(QBrush const& brush)
@@ -32,6 +39,18 @@ QRectF QEntity::boundingRect() const
 const QPointF& QEntity::getEntityPosition() const
 {
     return mPosition;
+}
+
+bool QEntity::isBorn()
+{
+
+    if (mBorn)
+    {
+        return true;
+    }
+
+
+    return false;
 }
 
 

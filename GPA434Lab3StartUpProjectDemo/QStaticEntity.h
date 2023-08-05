@@ -17,12 +17,9 @@ public:
 	/*********************************************************/
 	bool isAlive() override;
 
-	//virtual void grow() = 0;
 
 	qreal mMaxFoodValue;
 	qreal mCurrentFoodValue;
-
-	qreal mCurrentMaturationStage;
 
 
 protected:
@@ -36,7 +33,6 @@ protected:
 class QHerb : public QStaticEntity
 {
 public:
-
 
 	QHerb(QPointF const& position, qreal scale = 1.0, QBrush const& brush = Qt::white, QStaticEntity* parent = nullptr);
 	~QHerb() override = default;
